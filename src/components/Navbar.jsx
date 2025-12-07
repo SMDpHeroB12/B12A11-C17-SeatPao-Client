@@ -2,6 +2,7 @@ import { Link, NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { CgDarkMode } from "react-icons/cg";
+import Logo from "./Logo/Logo";
 
 const Navbar = () => {
   const user = null;
@@ -71,9 +72,7 @@ const Navbar = () => {
           </div>
 
           {/* Logo */}
-          <Link to="/" className="text-2xl font-bold">
-            Seat<span className="text-primary">Pao</span>
-          </Link>
+          <Logo></Logo>
         </div>
 
         {/* Center (Desktop Menu) */}

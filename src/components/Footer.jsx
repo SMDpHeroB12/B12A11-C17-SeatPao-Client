@@ -1,14 +1,13 @@
 import { Link } from "react-router";
 import stripeLogo from "../assets/icons/Stripe_Logo.svg";
+import Logo from "./Logo/Logo";
 const Footer = () => {
   return (
     <footer className="bg-base-200 mt-10 pt-10">
       <div className="w-11/12 mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {/* Logo + Description */}
         <div>
-          <h2 className="text-2xl font-bold">
-            Seat<span className="text-primary">Pao</span>
-          </h2>
+          <Logo></Logo>
           <p className="mt-3 text-sm text-gray-400">
             Book bus, train, launch & flight tickets easily. A complete online
             ticket booking experience.
