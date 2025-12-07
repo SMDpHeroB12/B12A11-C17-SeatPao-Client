@@ -1,10 +1,25 @@
 import { Link, NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
+import { CgDarkMode } from "react-icons/cg";
 
 const Navbar = () => {
   const user = null;
   const [isOpen, setIsOpen] = useState(false);
+
+  // Load theme on start
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+  }, []);
+
+  // Toggle theme handler
+  const handleThemeToggle = () => {
+    const currentTheme = document.documentElement.getAttribute("data-theme");
+    const newTheme = currentTheme === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
 
   const navLinks = (
     <>
@@ -67,7 +82,13 @@ const Navbar = () => {
         </div>
 
         {/* Right */}
-        <div className="navbar-end">
+        <div className="navbar-end flex items-center gap-3">
+          {/* Theme Button */}
+          <button onClick={handleThemeToggle} className="btn btn-ghost ">
+            <CgDarkMode size={25} />
+          </button>
+
+          {/* Auth Buttons */}
           {!user ? (
             <div className="flex items-center gap-2">
               <Link to="/login" className="btn btn-primary btn-sm">

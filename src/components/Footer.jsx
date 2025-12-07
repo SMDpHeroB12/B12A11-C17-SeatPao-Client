@@ -9,7 +9,7 @@ const Footer = () => {
           <h2 className="text-2xl font-bold">
             Seat<span className="text-primary">Pao</span>
           </h2>
-          <p className="mt-3 text-sm text-gray-600">
+          <p className="mt-3 text-sm text-gray-400">
             Book bus, train, launch & flight tickets easily. A complete online
             ticket booking experience.
           </p>
