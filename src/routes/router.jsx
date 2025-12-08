@@ -6,6 +6,9 @@ import AllTickets from "../pages/AllTickets";
 import TicketDetails from "../pages/TicketDetails";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
+import PrivateRoute from "./PrivateRoute";
+import DashboardLayout from "../layouts/DashboardLayout";
+import UserProfile from "../pages/dashboard/user/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -35,5 +38,25 @@ const router = createBrowserRouter([
     path: "/register",
     Component: Register,
   },
+
+  // PROTECTED ROUTE (Dashboard)
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout />
+      </PrivateRoute>
+    ),
+    children: [
+      {
+        path: "profile",
+        element: <UserProfile />,
+      },
+
+      // { path: "my-bookings", element: <MyBookedTickets /> },
+      // { path: "add-ticket", element: <AddTicket /> },
+    ],
+  },
 ]);
+
 export default router;

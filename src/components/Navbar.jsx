@@ -1,11 +1,12 @@
 import { Link, NavLink } from "react-router-dom";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "../providers/AuthProvider";
 import { FaBars } from "react-icons/fa";
 import { CgDarkMode } from "react-icons/cg";
 import Logo from "./Logo/Logo";
 
 const Navbar = () => {
-  const user = null;
+  const { user, logoutUser } = useContext(AuthContext);
 
   // Load theme on start
   useEffect(() => {
@@ -13,7 +14,7 @@ const Navbar = () => {
     document.documentElement.setAttribute("data-theme", savedTheme);
   }, []);
 
-  // Toggle theme handler
+  // Toggle theme
   const handleThemeToggle = () => {
     const currentTheme = document.documentElement.getAttribute("data-theme");
     const newTheme = currentTheme === "light" ? "dark" : "light";
@@ -21,6 +22,7 @@ const Navbar = () => {
     localStorage.setItem("theme", newTheme);
   };
 
+  // Nav links section
   const navLinks = (
     <>
       <li>
@@ -29,6 +31,7 @@ const Navbar = () => {
       <li>
         <NavLink to="/tickets">All Tickets</NavLink>
       </li>
+
       {user && (
         <li>
           <NavLink to="/dashboard">Dashboard</NavLink>
@@ -42,7 +45,7 @@ const Navbar = () => {
       <div className="navbar w-11/12 mx-auto">
         {/* LEFT */}
         <div className="navbar-start">
-          {/* MOBILE DROPDOWN */}
+          {/* MOBILE MENU */}
           <div className="dropdown lg:hidden">
             <label tabIndex={0} className="btn btn-ghost">
               <FaBars size={22} />
@@ -52,12 +55,11 @@ const Navbar = () => {
               tabIndex={0}
               className="menu menu-sm dropdown-content mt-3 p-3 shadow bg-base-100 rounded-box w-60 z-50"
             >
-              {/* Nav Links */}
               {navLinks}
 
               <hr className="my-3" />
 
-              {/* Login + Register buttons on MOBILE */}
+              {/* Mobile Auth Section */}
               {!user ? (
                 <div className="flex flex-col gap-2">
                   <Link to="/login" className="btn btn-primary btn-sm">
@@ -73,7 +75,7 @@ const Navbar = () => {
                     <Link to="/dashboard/profile">My Profile</Link>
                   </li>
                   <li>
-                    <button>Logout</button>
+                    <button onClick={logoutUser}>Logout</button>
                   </li>
                 </>
               )}
@@ -84,14 +86,14 @@ const Navbar = () => {
           <Logo />
         </div>
 
-        {/* CENTER (Desktop Menu) */}
+        {/* CENTER (Desktop) */}
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal gap-3">{navLinks}</ul>
         </div>
 
-        {/* RIGHT (Both Views) */}
+        {/* RIGHT */}
         <div className="navbar-end flex items-center gap-3">
-          {/* Theme Toggle */}
+          {/* THEME TOGGLE */}
           <button
             onClick={handleThemeToggle}
             className="btn btn-ghost border rounded-full"
@@ -111,9 +113,28 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="dropdown dropdown-end hidden lg:block">
-              <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                <img alt="user" className="rounded-full" src={user?.photoURL} />
-              </div>
+              <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                <div className="w-10 rounded-full">
+                  <img src={user?.photoURL || "/default-user.png"} alt="user" />
+                </div>
+              </label>
+
+              <ul
+                tabIndex={0}
+                className="mt-3 p-3 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+              >
+                <li className="font-medium px-2 py-1 border-b">
+                  {user.displayName || "User"}
+                </li>
+
+                <li>
+                  <Link to="/dashboard/profile">My Profile</Link>
+                </li>
+
+                <li>
+                  <button onClick={logoutUser}>Logout</button>
+                </li>
+              </ul>
             </div>
           )}
         </div>
