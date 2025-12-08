@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import stripeLogo from "../assets/icons/Stripe_Logo.svg";
 import Logo from "./Logo/Logo";
+import { FaFacebookSquare } from "react-icons/fa";
 const Footer = () => {
   return (
     <footer className="bg-base-200 mt-10 pt-10">
@@ -42,9 +43,16 @@ const Footer = () => {
           <h3 className="text-lg font-semibold mb-3">Contact</h3>
           <ul className="space-y-2">
             <li>Email: support@seatpao.com</li>
-            <li>Phone: +880 123 456 789</li>
-            <li>
-              <a className="link link-hover">Facebook Page</a>
+            <li>Phone: +880 1791 717 966</li>
+            <li className="flex items-center">
+              <Link
+                to="https://www.facebook.com/learnersIT.BD/"
+                target="_blank"
+                className="link link-hover flex items-center gap-2 "
+              >
+                <FaFacebookSquare size={25} className="text-primary" /> Facebook
+                Page
+              </Link>
             </li>
           </ul>
         </div>

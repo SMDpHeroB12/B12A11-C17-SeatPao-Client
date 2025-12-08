@@ -1,12 +1,11 @@
 import { Link, NavLink } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FaBars } from "react-icons/fa";
 import { CgDarkMode } from "react-icons/cg";
 import Logo from "./Logo/Logo";
 
 const Navbar = () => {
   const user = null;
-  const [isOpen, setIsOpen] = useState(false);
 
   // Load theme on start
   useEffect(() => {
@@ -25,22 +24,14 @@ const Navbar = () => {
   const navLinks = (
     <>
       <li>
-        <NavLink to="/" className="font-medium">
-          Home
-        </NavLink>
+        <NavLink to="/">Home</NavLink>
       </li>
-
       <li>
-        <NavLink to="/tickets" className="font-medium">
-          All Tickets
-        </NavLink>
+        <NavLink to="/tickets">All Tickets</NavLink>
       </li>
-
       {user && (
         <li>
-          <NavLink to="/dashboard" className="font-medium">
-            Dashboard
-          </NavLink>
+          <NavLink to="/dashboard">Dashboard</NavLink>
         </li>
       )}
     </>
@@ -49,47 +40,68 @@ const Navbar = () => {
   return (
     <div className="bg-base-100 sticky top-0 shadow z-50">
       <div className="navbar w-11/12 mx-auto">
-        {/* Left */}
+        {/* LEFT */}
         <div className="navbar-start">
-          {/* Mobile menu button */}
-          <div className="dropdown">
-            <button
-              tabIndex={0}
-              className="btn btn-ghost lg:hidden"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              <FaBars size={20} />
-            </button>
+          {/* MOBILE DROPDOWN */}
+          <div className="dropdown lg:hidden">
+            <label tabIndex={0} className="btn btn-ghost">
+              <FaBars size={22} />
+            </label>
 
-            {isOpen && (
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content mt-3 p-3 shadow bg-base-100 rounded-box w-52"
-              >
-                {navLinks}
-              </ul>
-            )}
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content mt-3 p-3 shadow bg-base-100 rounded-box w-60 z-50"
+            >
+              {/* Nav Links */}
+              {navLinks}
+
+              <hr className="my-3" />
+
+              {/* Login + Register buttons on MOBILE */}
+              {!user ? (
+                <div className="flex flex-col gap-2">
+                  <Link to="/login" className="btn btn-primary btn-sm">
+                    Login
+                  </Link>
+                  <Link to="/register" className="btn btn-outline btn-sm">
+                    Register
+                  </Link>
+                </div>
+              ) : (
+                <>
+                  <li>
+                    <Link to="/dashboard/profile">My Profile</Link>
+                  </li>
+                  <li>
+                    <button>Logout</button>
+                  </li>
+                </>
+              )}
+            </ul>
           </div>
 
           {/* Logo */}
-          <Logo></Logo>
+          <Logo />
         </div>
 
-        {/* Center (Desktop Menu) */}
+        {/* CENTER (Desktop Menu) */}
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal gap-2">{navLinks}</ul>
+          <ul className="menu menu-horizontal gap-3">{navLinks}</ul>
         </div>
 
-        {/* Right */}
+        {/* RIGHT (Both Views) */}
         <div className="navbar-end flex items-center gap-3">
-          {/* Theme Button */}
-          <button onClick={handleThemeToggle} className="btn btn-ghost ">
-            <CgDarkMode size={25} />
+          {/* Theme Toggle */}
+          <button
+            onClick={handleThemeToggle}
+            className="btn btn-ghost border rounded-full"
+          >
+            <CgDarkMode size={22} />
           </button>
 
-          {/* Auth Buttons */}
+          {/* Desktop Auth Buttons */}
           {!user ? (
-            <div className="flex items-center gap-2">
+            <div className="hidden lg:flex items-center gap-2">
               <Link to="/login" className="btn btn-primary btn-sm">
                 Login
               </Link>
@@ -98,22 +110,10 @@ const Navbar = () => {
               </Link>
             </div>
           ) : (
-            <div className="dropdown dropdown-end">
+            <div className="dropdown dropdown-end hidden lg:block">
               <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                <img alt="user" className="rounded-full" src={user.photoURL} />
+                <img alt="user" className="rounded-full" src={user?.photoURL} />
               </div>
-
-              <ul
-                tabIndex={0}
-                className="mt-3 p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-40"
-              >
-                <li>
-                  <Link to="/dashboard/profile">My Profile</Link>
-                </li>
-                <li>
-                  <button>Logout</button>
-                </li>
-              </ul>
             </div>
           )}
         </div>
