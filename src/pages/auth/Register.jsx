@@ -22,8 +22,7 @@ const Register = () => {
     const password = form.password.value;
     const confirm = form.confirm.value;
 
-    //  Validations
-
+    // Validations
     if (password.length < 6) {
       setError("Password must be at least 6 characters.");
       return;
@@ -35,10 +34,25 @@ const Register = () => {
     }
 
     try {
+      // Create Firebase Account
       await registerUser(name, photo, email, password);
 
+      // Save User to MongoDB
+      await fetch(`${import.meta.env.VITE_API_URL}/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          photo,
+          role: "user",
+        }),
+      });
+
       toast.success("Account created successfully!");
-      navigate("/"); // Redirect to home
+      navigate("/");
     } catch (err) {
       console.log(err);
       setError(err.message);
@@ -49,7 +63,21 @@ const Register = () => {
 
   const handleGoogle = () => {
     googleLogin()
-      .then(() => {
+      .then(async (result) => {
+        const user = result.user;
+
+        // Save Google User to Database
+        await fetch(`${import.meta.env.VITE_API_URL}/users`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: user.displayName,
+            email: user.email,
+            photo: user.photoURL,
+            role: "user",
+          }),
+        });
+
         toast.success("Login successful!");
         navigate("/");
       })

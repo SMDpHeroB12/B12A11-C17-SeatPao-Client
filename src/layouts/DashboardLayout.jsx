@@ -1,9 +1,32 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../providers/AuthProvider";
 
 const DashboardLayout = () => {
   const { user } = useContext(AuthContext);
+
+  const [role, setRole] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch User Role From MongoDB
+  useEffect(() => {
+    if (!user?.email) return;
+
+    fetch(`${import.meta.env.VITE_API_URL}/users/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setRole(data?.role || "user");
+        setLoading(false);
+      });
+  }, [user?.email]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center text-xl">
+        Loading Dashboard...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-base-100">
@@ -24,38 +47,97 @@ const DashboardLayout = () => {
             </div>
 
             <nav className="flex flex-col gap-2">
-              <NavLink
-                to="/dashboard/profile"
-                className={({ isActive }) =>
-                  `px-3 py-2 rounded-md hover:bg-base-100 ${
-                    isActive ? "bg-base-100 font-medium" : ""
-                  }`
-                }
-              >
-                My Profile
-              </NavLink>
+              {/* USER MENU */}
+              {role === "user" && (
+                <>
+                  <NavLink
+                    to="/dashboard/profile"
+                    className={({ isActive }) =>
+                      `px-3 py-2 rounded-md hover:bg-base-100 ${
+                        isActive ? "bg-base-100 font-medium" : ""
+                      }`
+                    }
+                  >
+                    My Profile
+                  </NavLink>
 
-              <NavLink
-                to="/dashboard/my-bookings"
-                className={({ isActive }) =>
-                  `px-3 py-2 rounded-md hover:bg-base-100 ${
-                    isActive ? "bg-base-100 font-medium" : ""
-                  }`
-                }
-              >
-                My Booked Tickets
-              </NavLink>
+                  <NavLink
+                    to="/dashboard/my-bookings"
+                    className={({ isActive }) =>
+                      `px-3 py-2 rounded-md hover:bg-base-100 ${
+                        isActive ? "bg-base-100 font-medium" : ""
+                      }`
+                    }
+                  >
+                    My Booked Tickets
+                  </NavLink>
 
-              <NavLink
-                to="/dashboard/transactions"
-                className={({ isActive }) =>
-                  `px-3 py-2 rounded-md hover:bg-base-100 ${
-                    isActive ? "bg-base-100 font-medium" : ""
-                  }`
-                }
-              >
-                Transaction History
-              </NavLink>
+                  <NavLink
+                    to="/dashboard/transactions"
+                    className={({ isActive }) =>
+                      `px-3 py-2 rounded-md hover:bg-base-100 ${
+                        isActive ? "bg-base-100 font-medium" : ""
+                      }`
+                    }
+                  >
+                    Transaction History
+                  </NavLink>
+                </>
+              )}
+
+              {/* VENDOR MENU */}
+              {role === "vendor" && (
+                <>
+                  <NavLink
+                    to="/dashboard/add-ticket"
+                    className={({ isActive }) =>
+                      `px-3 py-2 rounded-md hover:bg-base-100 ${
+                        isActive ? "bg-base-100 font-medium" : ""
+                      }`
+                    }
+                  >
+                    Add Ticket
+                  </NavLink>
+
+                  <NavLink
+                    to="/dashboard/my-tickets"
+                    className={({ isActive }) =>
+                      `px-3 py-2 rounded-md hover:bg-base-100 ${
+                        isActive ? "bg-base-100 font-medium" : ""
+                      }`
+                    }
+                  >
+                    My Tickets
+                  </NavLink>
+                </>
+              )}
+
+              {/* ADMIN MENU */}
+              {role === "admin" && (
+                <>
+                  <NavLink
+                    to="/dashboard/manage-users"
+                    className={({ isActive }) =>
+                      `px-3 py-2 rounded-md hover:bg-base-100 ${
+                        isActive ? "bg-base-100 font-medium" : ""
+                      }`
+                    }
+                  >
+                    Manage Users
+                  </NavLink>
+
+                  <NavLink
+                    to="/dashboard/manage-tickets"
+                    className={({ isActive }) =>
+                      `px-3 py-2 rounded-md hover:bg-base-100 ${
+                        isActive ? "bg-base-100 font-medium" : ""
+                      }`
+                    }
+                  >
+                    Manage Tickets
+                  </NavLink>
+                </>
+              )}
             </nav>
           </div>
         </aside>

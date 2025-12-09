@@ -9,7 +9,7 @@ const HeroSection = () => {
         <motion.img
           src="https://i.ibb.co.com/KcS9cjYD/ticket-booking.png"
           alt="Ticket Booking"
-          className="max-w-[100%] sm:max-w-sm rounded-lg "
+          className="max-w-full sm:max-w-sm rounded-lg "
           initial={{ opacity: 0, x: 80 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
