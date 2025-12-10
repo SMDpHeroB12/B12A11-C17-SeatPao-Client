@@ -34,15 +34,29 @@ const DashboardLayout = () => {
         {/* Sidebar */}
         <aside className="col-span-1 lg:col-span-2">
           <div className="bg-base-200 p-4 rounded-xl shadow">
-            <div className="flex items-center gap-4 mb-4">
-              <img
-                src={user?.photoURL || "/default-user.png"}
-                alt="avatar"
-                className="w-14 h-14 rounded-full object-cover border"
-              />
-              <div>
-                <p className="font-semibold">{user?.displayName || "User"}</p>
-                <p className="text-sm opacity-70">{user?.email}</p>
+            <div className="sm:flex sm:items-center sm:justify-between gap-4 mb-4">
+              <div className=" flex items-center gap-4 mb-4">
+                <img
+                  src={user?.photoURL || "/default-user.png"}
+                  alt="avatar"
+                  className="w-14 h-14 rounded-full object-cover border"
+                />
+                <div>
+                  <p className="font-semibold">{user?.displayName || "User"}</p>
+                  <p className="text-sm opacity-70">{user?.email}</p>
+                </div>
+              </div>
+              <div className="text-center">
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    `px-3 py-2  bg-accent font-medium text-white rounded-md hover:bg-base-100 hover:text-accent ${
+                      isActive ? "bg-base-100 font-medium" : ""
+                    }`
+                  }
+                >
+                  Go to Home
+                </NavLink>
               </div>
             </div>
 
@@ -89,6 +103,26 @@ const DashboardLayout = () => {
               {role === "vendor" && (
                 <>
                   <NavLink
+                    to="/dashboard/profile"
+                    className={({ isActive }) =>
+                      `px-3 py-2 rounded-md hover:bg-base-100 ${
+                        isActive ? "bg-base-100 font-medium" : ""
+                      }`
+                    }
+                  >
+                    Vendor Profile
+                  </NavLink>
+                  <NavLink
+                    to="/dashboard/vendor"
+                    className={({ isActive }) =>
+                      `px-3 py-2 rounded-md hover:bg-base-100 ${
+                        isActive ? "bg-base-100 font-medium" : ""
+                      }`
+                    }
+                  >
+                    Vendor Dashboard
+                  </NavLink>
+                  <NavLink
                     to="/dashboard/add-ticket"
                     className={({ isActive }) =>
                       `px-3 py-2 rounded-md hover:bg-base-100 ${
@@ -115,6 +149,26 @@ const DashboardLayout = () => {
               {/* ADMIN MENU */}
               {role === "admin" && (
                 <>
+                  <NavLink
+                    to="/dashboard/profile"
+                    className={({ isActive }) =>
+                      `px-3 py-2 rounded-md hover:bg-base-100 ${
+                        isActive ? "bg-base-100 font-medium" : ""
+                      }`
+                    }
+                  >
+                    Admin Profile
+                  </NavLink>
+                  <NavLink
+                    to="/dashboard/admin"
+                    className={({ isActive }) =>
+                      `px-3 py-2 rounded-md hover:bg-base-100 ${
+                        isActive ? "bg-base-100 font-medium" : ""
+                      }`
+                    }
+                  >
+                    Admin Dashboard
+                  </NavLink>
                   <NavLink
                     to="/dashboard/manage-users"
                     className={({ isActive }) =>

@@ -1,45 +1,54 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
+import DashboardLayout from "../layouts/DashboardLayout";
+
 import ErrorPage from "../pages/ErrorPage";
-import Home from "../pages/Home/Home";
+
 import AllTickets from "../pages/AllTickets";
 import TicketDetails from "../pages/TicketDetails";
+
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
+
 import PrivateRoute from "./PrivateRoute";
-import DashboardLayout from "../layouts/DashboardLayout";
-import UserProfile from "../pages/dashboard/user/UserProfile";
+
+// Dashboard Pages
+
+import MyBookings from "../pages/dashboard/MyBookings";
+import Transactions from "../pages/dashboard/Transactions";
+
+import AddTicket from "../pages/dashboard/AddTicket";
+import MyTickets from "../pages/dashboard/MyTickets";
+
+import ManageUsers from "../pages/dashboard/ManageUsers";
+import ManageTickets from "../pages/dashboard/ManageTickets";
+import Home from "../pages/Home/Home";
+
+import Profile from "../pages/dashboard/Profile";
+import AdminDashboard from "../pages/dashboard/admin/AdminDashboard";
+import AdminRoute from "./AdminRoute";
+import VendorRoute from "./VendorRoute";
+import VendorDashboard from "../pages/dashboard/Vendor/VendorDashboard";
+import Payment from "../pages/dashboard/Payment";
 
 const router = createBrowserRouter([
+  // MAIN WEBSITE LAYOUT =====================
   {
     path: "/",
     element: <MainLayout />,
     errorElement: <ErrorPage />,
     children: [
-      {
-        path: "/",
-        Component: Home,
-      },
-      {
-        path: "/tickets",
-        Component: AllTickets,
-      },
-      {
-        path: "/ticket/:id",
-        Component: TicketDetails,
-      },
+      { path: "/", Component: Home },
+      { path: "/tickets", Component: AllTickets },
+      { path: "/ticket/:id", Component: TicketDetails },
     ],
   },
-  {
-    path: "/login",
-    Component: Login,
-  },
-  {
-    path: "/register",
-    Component: Register,
-  },
 
-  // PROTECTED ROUTE (Dashboard)
+  // AUTH ROUTES =============================
+  { path: "/login", Component: Login },
+  { path: "/register", Component: Register },
+
+  // DASHBOARD ROUTES (Protected) ===========
   {
     path: "/dashboard",
     element: (
@@ -49,12 +58,40 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "profile",
-        element: <UserProfile />,
+        path: "/dashboard/payment/:id",
+        element: <Payment />,
+        loader: ({ params }) =>
+          fetch(`${import.meta.env.VITE_API_URL}/bookings/${params.id}`),
       },
 
-      // { path: "my-bookings", element: <MyBookedTickets /> },
-      // { path: "add-ticket", element: <AddTicket /> },
+      { path: "profile", Component: Profile },
+      { path: "my-bookings", Component: MyBookings },
+      { path: "transactions", Component: Transactions },
+
+      // Vendor
+
+      {
+        path: "/dashboard/vendor",
+        element: (
+          <VendorRoute>
+            <VendorDashboard />
+          </VendorRoute>
+        ),
+      },
+      { path: "add-ticket", Component: AddTicket },
+      { path: "my-tickets", Component: MyTickets },
+
+      // Admin
+      {
+        path: "admin",
+        element: (
+          <AdminRoute>
+            <AdminDashboard></AdminDashboard>{" "}
+          </AdminRoute>
+        ),
+      },
+      { path: "manage-users", Component: ManageUsers },
+      { path: "manage-tickets", Component: ManageTickets },
     ],
   },
 ]);

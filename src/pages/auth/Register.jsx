@@ -34,19 +34,19 @@ const Register = () => {
     }
 
     try {
-      // Create Firebase Account
+      // Create Firebase account
       await registerUser(name, photo, email, password);
 
-      // Save User to MongoDB
+      // Save user to MongoDB
       await fetch(`${import.meta.env.VITE_API_URL}/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name,
+          displayName: name,
           email,
-          photo,
+          photoURL: photo,
           role: "user",
         }),
       });
@@ -59,21 +59,20 @@ const Register = () => {
     }
   };
 
-  // Handle Google Sign In
-
+  // Google Login
   const handleGoogle = () => {
     googleLogin()
       .then(async (result) => {
         const user = result.user;
 
-        // Save Google User to Database
+        // Save Google user to DB
         await fetch(`${import.meta.env.VITE_API_URL}/users`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            name: user.displayName,
+            displayName: user.displayName,
             email: user.email,
-            photo: user.photoURL,
+            photoURL: user.photoURL,
             role: "user",
           }),
         });
@@ -94,12 +93,9 @@ const Register = () => {
           Create an Account
         </h2>
 
-        {/* Error Message */}
         {error && <p className="text-red-500 text-center mb-3">{error}</p>}
 
-        {/* FORM */}
         <form onSubmit={handleRegister} className="space-y-4">
-          {/* Name */}
           <div>
             <label className="font-medium">Full Name</label>
             <input
@@ -111,7 +107,6 @@ const Register = () => {
             />
           </div>
 
-          {/* Photo */}
           <div>
             <label className="font-medium">Photo URL</label>
             <input
@@ -122,7 +117,6 @@ const Register = () => {
             />
           </div>
 
-          {/* Email */}
           <div>
             <label className="font-medium">Email</label>
             <input
@@ -134,7 +128,6 @@ const Register = () => {
             />
           </div>
 
-          {/* Password */}
           <div>
             <label className="font-medium">Password</label>
             <input
@@ -146,7 +139,6 @@ const Register = () => {
             />
           </div>
 
-          {/* Confirm Password */}
           <div>
             <label className="font-medium">Confirm Password</label>
             <input
@@ -158,16 +150,13 @@ const Register = () => {
             />
           </div>
 
-          {/* Submit Button */}
           <button type="submit" className="btn btn-primary w-full mt-3">
             Create Account
           </button>
         </form>
 
-        {/* Divider */}
         <div className="divider">OR</div>
 
-        {/* Google Button */}
         <button
           onClick={handleGoogle}
           className="btn btn-outline w-full flex items-center gap-3"
