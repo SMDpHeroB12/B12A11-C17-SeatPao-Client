@@ -27,7 +27,7 @@ import AdminDashboard from "../pages/dashboard/admin/AdminDashboard";
 import AdminRoute from "./AdminRoute";
 import VendorRoute from "./VendorRoute";
 import VendorDashboard from "../pages/dashboard/Vendor/VendorDashboard";
-import Payment from "../pages/dashboard/Payment";
+
 import TicketDetails from "../pages/TicketDetails/TicketDetails";
 import PaymentPage from "../pages/Payment/PaymentPage";
 import MyTickets from "../pages/dashboard/Vendor/MyTickets";
@@ -44,7 +44,15 @@ const router = createBrowserRouter([
     children: [
       { path: "/", Component: Home },
       { path: "/tickets", Component: AllTickets },
-      { path: "/ticket/:id", Component: TicketDetails },
+      // Protected ticket details route
+      {
+        path: "/ticket/:id",
+        element: (
+          <PrivateRoute>
+            <TicketDetails />
+          </PrivateRoute>
+        ),
+      },
     ],
   },
 

@@ -7,15 +7,22 @@ const AllTickets = () => {
 
   const [search, setSearch] = useState("");
   const [type, setType] = useState("all");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/tickets/all`)
+    // fetch approved tickets (server returns only approved & visible)
+    fetch(`${import.meta.env.VITE_API_URL}/tickets`)
       .then((res) => res.json())
       .then((data) => {
-        setTickets(data);
-        setFiltered(data);
+        setTickets(Array.isArray(data) ? data : []);
+        setFiltered(Array.isArray(data) ? data : []);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.error("Failed to fetch tickets:", err);
+        setTickets([]);
+        setFiltered([]);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   // Filter logic
@@ -24,16 +31,28 @@ const AllTickets = () => {
 
     if (search.trim() !== "") {
       data = data.filter((t) =>
-        t.title.toLowerCase().includes(search.toLowerCase())
+        (t.title || "").toLowerCase().includes(search.toLowerCase())
       );
     }
 
     if (type !== "all") {
-      data = data.filter((t) => t.type === type);
+      data = data.filter((t) => {
+        // normalize type strings (bus/train/launch/air)
+        const ttype = (t.type || "").toString().toLowerCase();
+        return ttype === type.toLowerCase();
+      });
     }
 
     setFiltered(data);
   }, [search, type, tickets]);
+
+  if (loading) {
+    return (
+      <div className="w-11/12 mx-auto py-10 text-center">
+        <p className="text-xl">Loading tickets...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-11/12 mx-auto py-10">

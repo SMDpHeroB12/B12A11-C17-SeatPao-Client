@@ -11,49 +11,155 @@ const TicketDetails = () => {
 
   const [ticket, setTicket] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // booking modal state
+  const [showModal, setShowModal] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [bookingLoading, setBookingLoading] = useState(false);
+
+  // countdown
+  const [timeLeft, setTimeLeft] = useState(null);
+
+  // Parse departure datetime from ticket (supports date+time fields)
+  const getDepartureDateTime = (t) => {
+    if (!t) return null;
+    if (t.date && t.time) {
+      // assume date is yyyy-mm-dd and time is HH:MM (24h)
+      const combined = `${t.date}T${t.time}`;
+      const d = new Date(combined);
+      if (!isNaN(d)) return d;
+    }
+    // fallback if there's a datetime field
+    if (t.departure) {
+      const d = new Date(t.departure);
+      if (!isNaN(d)) return d;
+    }
+    // fallback: if ticket has createdAt + duration etc — not handling
+    return null;
+  };
 
   // Load ticket details
   useEffect(() => {
+    setLoading(true);
     fetch(`${import.meta.env.VITE_API_URL}/tickets/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        setTicket(data);
-        setLoading(false);
+        setTicket(data && Object.keys(data).length ? data : null);
       })
-      .catch(() => setLoading(false));
+      .catch((err) => {
+        console.error("Failed to load ticket:", err);
+        setTicket(null);
+      })
+      .finally(() => setLoading(false));
   }, [id]);
 
-  // Handle Booking
-  const handleBooking = async () => {
-    if (!user) {
-      toast.error("Please login first!");
-      return navigate("/login");
+  // Countdown effect
+  useEffect(() => {
+    if (!ticket) {
+      setTimeLeft(null);
+      return;
+    }
+    const dep = getDepartureDateTime(ticket);
+    if (!dep) {
+      setTimeLeft(null);
+      return;
     }
 
-    if (quantity < 1) {
-      return toast.error("Minimum 1 seat required!");
-    }
-
-    const bookingInfo = {
-      ticketId: id,
-      quantity,
-      userEmail: user.email,
-      userName: user.displayName,
+    const update = () => {
+      const now = new Date();
+      const diff = dep.getTime() - now.getTime();
+      if (diff <= 0) {
+        setTimeLeft("Departed");
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
     };
 
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/bookings`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(bookingInfo),
-    });
-    const data = await res.json();
+    update();
+    const timer = setInterval(update, 1000);
+    return () => clearInterval(timer);
+  }, [ticket]);
 
-    if (data.success) {
-      toast.success("Booking successful!");
-      navigate("/dashboard/my-bookings");
-    } else {
-      toast.error(data.error || "Failed to book ticket.");
+  const departureDateTime = getDepartureDateTime(ticket);
+  const isDeparted = departureDateTime
+    ? departureDateTime.getTime() <= new Date().getTime()
+    : false;
+  const availableSeats = ticket ? ticket.seats ?? ticket.quantity ?? 0 : 0;
+
+  // show booking modal
+  const openBooking = () => {
+    if (!user) {
+      toast.error("Please login to book tickets.");
+      return navigate("/login");
+    }
+    if (isDeparted) {
+      toast.error("Departure time has already passed.");
+      return;
+    }
+    if (availableSeats < 1) {
+      toast.error("No seats available.");
+      return;
+    }
+    setQuantity(1);
+    setShowModal(true);
+  };
+
+  const handleBooking = async (e) => {
+    e.preventDefault();
+    if (!user) {
+      toast.error("Please login to book tickets.");
+      return navigate("/login");
+    }
+    const q = Number(quantity);
+    if (!q || q < 1) {
+      toast.error("Minimum 1 seat required.");
+      return;
+    }
+    if (q > availableSeats) {
+      toast.error("Cannot book more than available seats.");
+      return;
+    }
+    if (isDeparted) {
+      toast.error("Cannot book. Departure already passed.");
+      return;
+    }
+
+    setBookingLoading(true);
+
+    try {
+      const bookingInfo = {
+        ticketId: id,
+        quantity: q,
+        userEmail: user.email,
+        userName: user.displayName || "",
+      };
+
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/bookings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bookingInfo),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        toast.success("Booking created — pending approval/payment.");
+        setShowModal(false);
+        // navigate to user's bookings
+        navigate("/dashboard/my-bookings");
+      } else {
+        // server returned error (400 etc)
+        toast.error(data.error || "Failed to create booking.");
+      }
+    } catch (err) {
+      console.error("Booking error:", err);
+      toast.error("Server error. Try again.");
+    } finally {
+      setBookingLoading(false);
     }
   };
 
@@ -86,18 +192,35 @@ const TicketDetails = () => {
           </p>
 
           <p className="mt-2">
-            Available Seats: <span className="font-medium">{ticket.seats}</span>
+            Available Seats:{" "}
+            <span className="font-medium">{availableSeats}</span>
+          </p>
+
+          <p className="mt-2">
+            Departure:{" "}
+            {departureDateTime ? (
+              <>
+                {departureDateTime.toLocaleDateString()}{" "}
+                {departureDateTime.toLocaleTimeString()}
+              </>
+            ) : (
+              "TBD"
+            )}
+          </p>
+
+          <p className="mt-2">
+            Countdown: <span className="font-medium">{timeLeft ?? "N/A"}</span>
           </p>
 
           <p className="mt-4 opacity-80">{ticket.description}</p>
 
-          {/* Quantity Selector */}
+          {/* Quantity Selector (not used when modal approach) */}
           <div className="mt-6">
             <label className="font-medium mb-1 block">Select Seats</label>
             <input
               type="number"
               min="1"
-              max={ticket.seats}
+              max={availableSeats}
               value={quantity}
               onChange={(e) => setQuantity(Number(e.target.value))}
               className="input input-bordered w-full"
@@ -106,11 +229,15 @@ const TicketDetails = () => {
 
           {/* Book Button */}
           <button
-            onClick={handleBooking}
+            onClick={openBooking}
             className="btn btn-primary w-full mt-5"
-            disabled={ticket.seats < 1}
+            disabled={availableSeats < 1 || isDeparted}
           >
-            {ticket.seats < 1 ? "Sold Out" : "Book Now"}
+            {availableSeats < 1
+              ? "Sold Out"
+              : isDeparted
+              ? "Departure Passed"
+              : "Book Now"}
           </button>
         </div>
 
@@ -123,6 +250,54 @@ const TicketDetails = () => {
           />
         </div>
       </div>
+
+      {/* Booking Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-base-100 p-6 rounded-xl w-full max-w-md">
+            <h3 className="text-xl font-semibold mb-3">
+              Book — {ticket.title}
+            </h3>
+
+            <form onSubmit={handleBooking} className="space-y-4">
+              <div>
+                <label className="block font-medium mb-1">Quantity</label>
+                <input
+                  type="number"
+                  min="1"
+                  max={availableSeats}
+                  value={quantity}
+                  onChange={(e) => setQuantity(Number(e.target.value))}
+                  className="input input-bordered w-full"
+                  required
+                />
+                <p className="text-sm opacity-70 mt-1">
+                  Max available: {availableSeats}
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={bookingLoading}
+                >
+                  {bookingLoading ? "Booking..." : "Confirm Booking"}
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-ghost"
+                  onClick={() => setShowModal(false)}
+                  disabled={bookingLoading}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
