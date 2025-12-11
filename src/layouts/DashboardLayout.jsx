@@ -103,16 +103,6 @@ const DashboardLayout = () => {
               {role === "vendor" && (
                 <>
                   <NavLink
-                    to="/dashboard/profile"
-                    className={({ isActive }) =>
-                      `px-3 py-2 rounded-md hover:bg-base-100 ${
-                        isActive ? "bg-base-100 font-medium" : ""
-                      }`
-                    }
-                  >
-                    Vendor Profile
-                  </NavLink>
-                  <NavLink
                     to="/dashboard/vendor"
                     className={({ isActive }) =>
                       `px-3 py-2 rounded-md hover:bg-base-100 ${
@@ -122,6 +112,17 @@ const DashboardLayout = () => {
                   >
                     Vendor Dashboard
                   </NavLink>
+                  <NavLink
+                    to="/dashboard/profile"
+                    className={({ isActive }) =>
+                      `px-3 py-2 rounded-md hover:bg-base-100 ${
+                        isActive ? "bg-base-100 font-medium" : ""
+                      }`
+                    }
+                  >
+                    Vendor Profile
+                  </NavLink>
+
                   <NavLink
                     to="/dashboard/add-ticket"
                     className={({ isActive }) =>
@@ -141,7 +142,27 @@ const DashboardLayout = () => {
                       }`
                     }
                   >
-                    My Tickets
+                    My Added Tickets
+                  </NavLink>
+                  <NavLink
+                    to="/dashboard/vendor/requests"
+                    className={({ isActive }) =>
+                      `px-3 py-2 rounded-md hover:bg-base-100 ${
+                        isActive ? "bg-base-100 font-medium" : ""
+                      }`
+                    }
+                  >
+                    Requested Bookings
+                  </NavLink>
+                  <NavLink
+                    to="/dashboard/vendor/revenue"
+                    className={({ isActive }) =>
+                      `px-3 py-2 rounded-md hover:bg-base-100 ${
+                        isActive ? "bg-base-100 font-medium" : ""
+                      }`
+                    }
+                  >
+                    Revenue Overview
                   </NavLink>
                 </>
               )}
@@ -189,6 +210,16 @@ const DashboardLayout = () => {
                     }
                   >
                     Manage Tickets
+                  </NavLink>
+                  <NavLink
+                    to="/dashboard/advertise"
+                    className={({ isActive }) =>
+                      `px-3 py-2 rounded-md hover:bg-base-100 ${
+                        isActive ? "bg-base-100 font-medium" : ""
+                      }`
+                    }
+                  >
+                    Advertise Tickets
                   </NavLink>
                 </>
               )}

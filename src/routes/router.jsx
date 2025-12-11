@@ -17,10 +17,9 @@ import MyBookings from "../pages/dashboard/MyBookings";
 import Transactions from "../pages/dashboard/Transactions";
 
 import AddTicket from "../pages/dashboard/Vendor/AddTicket";
-import MyTickets from "../pages/dashboard/MyTickets";
 
-import ManageUsers from "../pages/dashboard/ManageUsers";
-import ManageTickets from "../pages/dashboard/ManageTickets";
+import ManageUsers from "../pages/dashboard/admin/ManageUsers";
+import ManageTickets from "../pages/dashboard/admin/ManageTickets";
 import Home from "../pages/Home/Home";
 
 import Profile from "../pages/dashboard/Profile";
@@ -31,6 +30,10 @@ import VendorDashboard from "../pages/dashboard/Vendor/VendorDashboard";
 import Payment from "../pages/dashboard/Payment";
 import TicketDetails from "../pages/TicketDetails/TicketDetails";
 import PaymentPage from "../pages/Payment/PaymentPage";
+import MyTickets from "../pages/dashboard/Vendor/MyTickets";
+import RequestedBookings from "../pages/dashboard/Vendor/RequestedBookings";
+import RevenueOverview from "../pages/dashboard/Vendor/RevenueOverview";
+import AdvertiseTickets from "../pages/dashboard/admin/AdvertiseTickets";
 
 const router = createBrowserRouter([
   // MAIN WEBSITE LAYOUT =====================
@@ -81,6 +84,8 @@ const router = createBrowserRouter([
       },
       { path: "add-ticket", Component: AddTicket },
       { path: "my-tickets", Component: MyTickets },
+      { path: "vendor/requests", Component: RequestedBookings },
+      { path: "vendor/revenue", Component: RevenueOverview },
 
       // Admin
       {
@@ -91,6 +96,7 @@ const router = createBrowserRouter([
           </AdminRoute>
         ),
       },
+      { path: "advertise", Component: AdvertiseTickets },
       { path: "manage-users", Component: ManageUsers },
       { path: "manage-tickets", Component: ManageTickets },
     ],
