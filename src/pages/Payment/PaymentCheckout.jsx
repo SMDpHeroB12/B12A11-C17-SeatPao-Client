@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 
 const PaymentCheckout = () => {
   const booking = useLoaderData();
@@ -20,7 +20,7 @@ const PaymentCheckout = () => {
     const data = await res.json();
 
     if (data.url) {
-      window.location.href = data.url; // Redirect to Stripe
+      window.location.href = data.url;
     }
   };
 

@@ -1,30 +1,31 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
-const TicketCard = () => {
+const TicketCard = ({ ticket }) => {
   return (
-    <div className="card bg-base-100 shadow-md hover:shadow-xl transition">
-      <figure className="h-70 overflow-hidden">
-        <img
-          src="https://i.ibb.co.com/5WXbQsrz/bus-t.jpg"
-          alt="ticket"
-          className="w-full h-full object-cover"
-        />
-      </figure>
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className="p-5 bg-base-200 rounded-xl shadow hover:shadow-lg duration-300"
+    >
+      <h3 className="text-xl font-semibold">{ticket.title}</h3>
+      <p className="opacity-70">{ticket.route}</p>
+      <p className="mt-2 font-bold text-lg">৳ {ticket.price}</p>
 
-      <div className="card-body">
-        <h2 className="card-title">Sample Ticket Title</h2>
-
-        <p className="text-sm text-gray-500">Transport: Bus</p>
-        <p className="text-sm text-gray-500">Price: $50</p>
-        <p className="text-sm text-gray-500">Quantity: 20</p>
-
-        <div className="card-actions justify-end mt-4">
-          <Link to="/ticket/123" className="btn btn-primary btn-sm">
-            See Details
-          </Link>
-        </div>
+      <div className="mt-3 flex justify-between items-center">
+        <span className="badge badge-primary">{ticket.type}</span>
+        <span className="badge">{ticket.seats} seats</span>
       </div>
-    </div>
+
+      <Link
+        to={`/ticket/${ticket._id}`}
+        className="btn btn-sm btn-primary w-full mt-4"
+      >
+        View Details
+      </Link>
+    </motion.div>
   );
 };
 
