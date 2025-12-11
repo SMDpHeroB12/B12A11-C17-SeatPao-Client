@@ -5,7 +5,6 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import ErrorPage from "../pages/ErrorPage";
 
 import AllTickets from "../pages/AllTickets";
-import TicketDetails from "../pages/TicketDetails";
 
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
@@ -30,6 +29,8 @@ import AdminRoute from "./AdminRoute";
 import VendorRoute from "./VendorRoute";
 import VendorDashboard from "../pages/dashboard/Vendor/VendorDashboard";
 import Payment from "../pages/dashboard/Payment";
+import TicketDetails from "../pages/TicketDetails/TicketDetails";
+import PaymentPage from "../pages/Payment/PaymentPage";
 
 const router = createBrowserRouter([
   // MAIN WEBSITE LAYOUT =====================
@@ -57,13 +58,13 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      {
-        path: "/dashboard/payment/:id",
-        element: <Payment />,
-        loader: ({ params }) =>
-          fetch(`${import.meta.env.VITE_API_URL}/bookings/${params.id}`),
-      },
-
+      // {
+      //   path: "/dashboard/payment/:id",
+      //   element: <Payment />,
+      //   loader: ({ params }) =>
+      //     fetch(`${import.meta.env.VITE_API_URL}/bookings/${params.id}`),
+      // },
+      // { path: "/payment/:id", Component: PaymentPage },
       { path: "profile", Component: Profile },
       { path: "my-bookings", Component: MyBookings },
       { path: "transactions", Component: Transactions },
@@ -93,6 +94,14 @@ const router = createBrowserRouter([
       { path: "manage-users", Component: ManageUsers },
       { path: "manage-tickets", Component: ManageTickets },
     ],
+  },
+  {
+    path: "/payment/:id",
+    element: (
+      <PrivateRoute>
+        <PaymentPage />
+      </PrivateRoute>
+    ),
   },
 ]);
 
