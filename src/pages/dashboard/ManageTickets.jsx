@@ -6,9 +6,9 @@ const ManageTickets = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch all tickets (admin)
+  // Fetch ALL tickets (admin)
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/tickets`)
+    fetch(`${import.meta.env.VITE_API_URL}/tickets/admin/all`)
       .then((res) => res.json())
       .then((data) => {
         setTickets(data);
@@ -17,29 +17,55 @@ const ManageTickets = () => {
       .catch(() => setLoading(false));
   }, []);
 
-  // Delete Ticket
-  const handleDelete = (id) => {
+  // Approve Ticket
+  const handleApprove = (id) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "This ticket will be removed permanently!",
-      icon: "warning",
+      title: "Approve Ticket?",
+      icon: "question",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Delete",
+      confirmButtonText: "Approve",
     }).then((result) => {
       if (!result.isConfirmed) return;
 
-      fetch(`${import.meta.env.VITE_API_URL}/tickets/${id}`, {
-        method: "DELETE",
+      fetch(`${import.meta.env.VITE_API_URL}/tickets/approve/${id}`, {
+        method: "PATCH",
       })
         .then((res) => res.json())
-        .then((data) => {
-          if (data.deletedCount > 0) {
-            Swal.fire("Deleted!", "Ticket removed successfully!", "success");
+        .then(() => {
+          toast.success("Ticket Approved!");
 
-            setTickets(tickets.filter((t) => t._id !== id));
-          }
+          setTickets((prev) =>
+            prev.map((t) =>
+              t._id === id ? { ...t, status: "approved", hidden: false } : t
+            )
+          );
+        });
+    });
+  };
+
+  // Reject Ticket
+  const handleReject = (id) => {
+    Swal.fire({
+      title: "Reject Ticket?",
+      text: "The ticket will NOT appear publicly.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Reject",
+    }).then((result) => {
+      if (!result.isConfirmed) return;
+
+      fetch(`${import.meta.env.VITE_API_URL}/tickets/reject/${id}`, {
+        method: "PATCH",
+      })
+        .then((res) => res.json())
+        .then(() => {
+          toast.success("Ticket Rejected!");
+
+          setTickets((prev) =>
+            prev.map((t) =>
+              t._id === id ? { ...t, status: "rejected", hidden: true } : t
+            )
+          );
         });
     });
   };
@@ -66,6 +92,7 @@ const ManageTickets = () => {
                 <th>Price</th>
                 <th>Vendor</th>
                 <th>Seats</th>
+                <th>Status</th>
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
@@ -88,12 +115,33 @@ const ManageTickets = () => {
 
                   <td>{t.seats}</td>
 
-                  <td className="text-center">
-                    <button
-                      onClick={() => handleDelete(t._id)}
-                      className="btn btn-sm btn-error"
+                  <td>
+                    <span
+                      className={`badge ${
+                        t.status === "approved"
+                          ? "badge-success"
+                          : t.status === "rejected"
+                          ? "badge-error"
+                          : "badge-warning"
+                      }`}
                     >
-                      Delete
+                      {t.status || "pending"}
+                    </span>
+                  </td>
+
+                  <td className="text-center flex gap-2 justify-center">
+                    <button
+                      onClick={() => handleApprove(t._id)}
+                      className="btn btn-sm btn-success"
+                    >
+                      Approve
+                    </button>
+
+                    <button
+                      onClick={() => handleReject(t._id)}
+                      className="btn btn-sm btn-warning"
+                    >
+                      Reject
                     </button>
                   </td>
                 </tr>

@@ -16,7 +16,7 @@ import PrivateRoute from "./PrivateRoute";
 import MyBookings from "../pages/dashboard/MyBookings";
 import Transactions from "../pages/dashboard/Transactions";
 
-import AddTicket from "../pages/dashboard/AddTicket";
+import AddTicket from "../pages/dashboard/Vendor/AddTicket";
 import MyTickets from "../pages/dashboard/MyTickets";
 
 import ManageUsers from "../pages/dashboard/ManageUsers";

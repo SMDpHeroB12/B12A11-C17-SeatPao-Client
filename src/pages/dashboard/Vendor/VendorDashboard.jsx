@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const VendorDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -30,6 +31,7 @@ const VendorDashboard = () => {
     return (
       <div className="text-center text-xl py-10">
         Loading Vendor Dashboard...
+        <LoadingSpinner></LoadingSpinner>
       </div>
     );
   }
