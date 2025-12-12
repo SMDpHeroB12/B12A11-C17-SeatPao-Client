@@ -29,11 +29,13 @@ import VendorRoute from "./VendorRoute";
 import VendorDashboard from "../pages/dashboard/Vendor/VendorDashboard";
 
 import TicketDetails from "../pages/TicketDetails/TicketDetails";
-import PaymentPage from "../pages/Payment/PaymentPage";
+
 import MyTickets from "../pages/dashboard/Vendor/MyTickets";
 import RequestedBookings from "../pages/dashboard/Vendor/RequestedBookings";
 import RevenueOverview from "../pages/dashboard/Vendor/RevenueOverview";
 import AdvertiseTickets from "../pages/dashboard/admin/AdvertiseTickets";
+import PaymentSuccess from "../pages/Payment/PaymentSuccess";
+import PaymentCancel from "../pages/Payment/PaymentCancel";
 
 const router = createBrowserRouter([
   // MAIN WEBSITE LAYOUT =====================
@@ -69,13 +71,6 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      // {
-      //   path: "/dashboard/payment/:id",
-      //   element: <Payment />,
-      //   loader: ({ params }) =>
-      //     fetch(`${import.meta.env.VITE_API_URL}/bookings/${params.id}`),
-      // },
-      // { path: "/payment/:id", Component: PaymentPage },
       { path: "profile", Component: Profile },
       { path: "my-bookings", Component: MyBookings },
       { path: "transactions", Component: Transactions },
@@ -109,14 +104,9 @@ const router = createBrowserRouter([
       { path: "manage-tickets", Component: ManageTickets },
     ],
   },
-  {
-    path: "/payment/:id",
-    element: (
-      <PrivateRoute>
-        <PaymentPage />
-      </PrivateRoute>
-    ),
-  },
+
+  { path: "/payment/success", Component: PaymentSuccess },
+  { path: "/payment/cancel", Component: PaymentCancel },
 ]);
 
 export default router;
