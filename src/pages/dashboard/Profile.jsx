@@ -95,8 +95,8 @@ const Profile = () => {
       </div>
 
       {loadingRole ? (
-        <div>
-          <p>Loading...</p>
+        <div className="flex flex-col justify-center items-center">
+          <p className="text-center py-10">Loading Profile...</p>
           <LoadingSpinner></LoadingSpinner>
         </div>
       ) : (

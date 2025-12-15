@@ -18,7 +18,7 @@ const Transactions = () => {
 
   if (loading) {
     return (
-      <div>
+      <div className="flex flex-col justify-center items-center">
         <p className="text-center py-10">Loading transactions...</p>
         <LoadingSpinner></LoadingSpinner>
       </div>

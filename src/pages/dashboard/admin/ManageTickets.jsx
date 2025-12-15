@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const ManageTickets = () => {
   const [tickets, setTickets] = useState([]);
@@ -41,7 +42,12 @@ const ManageTickets = () => {
   };
 
   if (loading) {
-    return <p className="text-center py-10">Loading tickets...</p>;
+    return (
+      <div className="flex flex-col justify-center items-center">
+        <p className="text-center py-10">Loading Tickets...</p>
+        <LoadingSpinner></LoadingSpinner>
+      </div>
+    );
   }
 
   return (
@@ -96,7 +102,7 @@ const ManageTickets = () => {
                   </span>
                 </td>
 
-                <td className="space-x-2">
+                <td className=" flex gap-3">
                   <button
                     disabled={t.status !== "pending"}
                     onClick={() => handleApprove(t._id)}

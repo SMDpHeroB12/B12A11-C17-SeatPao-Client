@@ -23,8 +23,11 @@ const AdminRoute = ({ children }) => {
 
   if (loading || checking) {
     return (
-      <div className="min-h-screen flex justify-center items-center text-xl">
-        Checking permission...
+      <div className="flex flex-col justify-center items-center">
+        <p className="min-h-screen flex justify-center items-center text-xl">
+          Checking permission....
+        </p>
+        <LoadingSpinner></LoadingSpinner>
       </div>
     );
   }

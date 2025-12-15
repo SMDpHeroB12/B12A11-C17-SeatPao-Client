@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import default_user from "../../../assets/images/default_user.jpg";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -61,7 +62,12 @@ const ManageUsers = () => {
   };
 
   if (loading) {
-    return <p className="text-center py-10">Loading users...</p>;
+    return (
+      <div className="flex flex-col justify-center items-center">
+        <p className="text-center py-10">Loading Users...</p>
+        <LoadingSpinner></LoadingSpinner>
+      </div>
+    );
   }
 
   return (

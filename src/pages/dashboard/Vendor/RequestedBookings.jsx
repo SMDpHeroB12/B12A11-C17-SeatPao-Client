@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { toast } from "react-hot-toast";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const RequestedBookings = () => {
   const { user } = useContext(AuthContext);
@@ -73,7 +74,12 @@ const RequestedBookings = () => {
   };
 
   if (loading) {
-    return <p className="text-center py-10">Loading requests...</p>;
+    return (
+      <div className="flex flex-col justify-center items-center">
+        <p className="text-center py-10">Loading Requests...</p>
+        <LoadingSpinner></LoadingSpinner>
+      </div>
+    );
   }
 
   if (!bookings.length) {

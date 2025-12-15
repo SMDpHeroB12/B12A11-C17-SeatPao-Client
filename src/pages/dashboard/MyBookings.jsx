@@ -68,7 +68,7 @@ const MyBookings = () => {
 
   if (loading) {
     return (
-      <div>
+      <div className="flex flex-col justify-center items-center">
         <p className="text-center py-10">Loading bookings...</p>
         <LoadingSpinner></LoadingSpinner>
       </div>
