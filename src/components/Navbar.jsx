@@ -26,15 +26,42 @@ const Navbar = () => {
   const navLinks = (
     <>
       <li>
-        <NavLink to="/">Home</NavLink>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `px-3 py-2 rounded-md hover:bg-base-100 ${
+              isActive ? "bg-base-100 font-medium" : ""
+            }`
+          }
+        >
+          Home
+        </NavLink>
       </li>
       <li>
-        <NavLink to="/tickets">All Tickets</NavLink>
+        <NavLink
+          to="/tickets"
+          className={({ isActive }) =>
+            `px-3 py-2 rounded-md hover:bg-base-100 ${
+              isActive ? "bg-base-100 font-medium" : ""
+            }`
+          }
+        >
+          All Tickets
+        </NavLink>
       </li>
 
       {user && (
         <li>
-          <NavLink to="/dashboard">Dashboard</NavLink>
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              `px-3 py-2 rounded-md hover:bg-base-100 ${
+                isActive ? "bg-base-100 font-medium" : ""
+              }`
+            }
+          >
+            Dashboard
+          </NavLink>
         </li>
       )}
     </>

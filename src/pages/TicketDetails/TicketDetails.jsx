@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
 import { toast } from "react-hot-toast";
 import default_ticket from "../../assets/images/default_ticket.jpg";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const TicketDetails = () => {
   const { id } = useParams();
@@ -166,7 +167,8 @@ const TicketDetails = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center text-xl">
-        Loading ticket details...
+        <p>Loading ticket details...</p>
+        <LoadingSpinner></LoadingSpinner>
       </div>
     );
   }
@@ -186,6 +188,9 @@ const TicketDetails = () => {
         <div className="bg-base-200 p-6 rounded-xl shadow">
           <h2 className="text-3xl font-bold mb-2">{ticket.title}</h2>
           <p className="text-lg opacity-80 mb-3">{ticket.route}</p>
+          <p className="text-lg opacity-80 mb-3 font-bold rounded-sm w-15 text-center bg-accent">
+            {ticket.type}
+          </p>
 
           <p className="font-semibold text-xl">
             Price: <span className="text-primary">৳ {ticket.price}</span>
@@ -197,7 +202,7 @@ const TicketDetails = () => {
           </p>
 
           <p className="mt-2">
-            Departure:{" "}
+            Departure:
             {departureDateTime ? (
               <>
                 {departureDateTime.toLocaleDateString()}{" "}
@@ -213,19 +218,6 @@ const TicketDetails = () => {
           </p>
 
           <p className="mt-4 opacity-80">{ticket.description}</p>
-
-          {/* Quantity Selector (not used when modal approach) */}
-          <div className="mt-6">
-            <label className="font-medium mb-1 block">Select Seats</label>
-            <input
-              type="number"
-              min="1"
-              max={availableSeats}
-              value={quantity}
-              onChange={(e) => setQuantity(Number(e.target.value))}
-              className="input input-bordered w-full"
-            />
-          </div>
 
           {/* Book Button */}
           <button

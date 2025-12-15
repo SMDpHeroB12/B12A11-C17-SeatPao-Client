@@ -1,66 +1,81 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { motion } from "motion/react";
+import { Link } from "react-router-dom";
 
 const LatestTicketsSection = () => {
-  const [latest, setLatest] = useState([]);
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/tickets/latest`)
+    fetch(`${import.meta.env.VITE_API_URL}/tickets`)
       .then((res) => res.json())
-      .then((data) => setLatest(data))
-      .catch((err) => console.log(err));
+      .then((data) => {
+        const latest = data
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .slice(0, 8);
+
+        setTickets(latest);
+        setLoading(false);
+      });
   }, []);
 
+  if (loading) {
+    return (
+      <div className="flex justify-center py-16">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
+
   return (
-    <section className="w-11/12 mx-auto my-16">
+    <section className="my-16">
       <motion.h2
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.6 }}
         className="text-3xl font-bold text-center mb-10"
       >
         Latest Tickets
       </motion.h2>
 
-      {latest.length === 0 ? (
-        <p className="opacity-70 text-center">
-          No latest tickets available right now.
-        </p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {latest.map((ticket) => (
-            <motion.div
-              key={ticket.id}
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="bg-base-100 border border-gray-200 rounded-xl shadow hover:shadow-xl transition overflow-hidden"
-            >
-              <div
-                key={ticket._id}
-                className="p-5 bg-base-200 rounded-xl shadow hover:shadow-lg duration-300"
-              >
-                <h3 className="text-xl font-semibold">{ticket.title}</h3>
-                <p className="opacity-70">{ticket.route}</p>
-                <p className="mt-2 font-bold text-lg">৳ {ticket.price}</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {tickets.map((ticket) => (
+          <motion.div
+            key={ticket._id}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            viewport={{ once: true }}
+            className="card bg-base-100 shadow-md"
+          >
+            <figure>
+              <img
+                src={ticket.image}
+                alt={ticket.title}
+                className="h-40 w-full object-cover"
+              />
+            </figure>
 
-                <div className="mt-3 flex justify-between items-center">
-                  <span className="badge badge-primary">{ticket.type}</span>
-                  <span className="badge">{ticket.seats} seats</span>
-                </div>
+            <div className="card-body">
+              <h3 className="font-semibold">{ticket.title}</h3>
 
-                <Link
-                  to={`/ticket/${ticket._id}`}
-                  className="btn btn-sm btn-primary w-full mt-4"
-                >
-                  View Details
-                </Link>
+              <div className="text-sm space-y-1">
+                <p>Price: ৳{ticket.price}</p>
+                <p>Quantity: {ticket.seats}</p>
+                <p>Transport: {ticket.transportType}</p>
+                <p className="truncate">Perks: {ticket.perks?.join(", ")}</p>
               </div>
-            </motion.div>
-          ))}
-        </div>
-      )}
+
+              <Link
+                to={`/ticket/${ticket._id}`}
+                className="btn btn-primary btn-sm mt-3"
+              >
+                See Details
+              </Link>
+            </div>
+          </motion.div>
+        ))}
+      </div>
     </section>
   );
 };

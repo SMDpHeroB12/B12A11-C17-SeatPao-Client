@@ -2,25 +2,29 @@ import { useLoaderData } from "react-router-dom";
 
 const PaymentCheckout = () => {
   const booking = useLoaderData();
-  // const navigate = useNavigate();
 
   const handlePayment = async () => {
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/payments/create-checkout-session`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          bookingId: booking._id,
-          amount: booking.total,
-        }),
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/payments/create-checkout-session`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            bookingId: booking._id,
+          }),
+        }
+      );
+      const data = await res.json();
+      if (data.url) {
+        // redirect to Stripe Checkout
+        window.location.href = data.url;
+      } else {
+        alert(data.error || "Failed to create checkout session");
       }
-    );
-
-    const data = await res.json();
-
-    if (data.url) {
-      window.location.href = data.url;
+    } catch (err) {
+      console.error("Create session error:", err);
+      alert("Server error creating checkout session");
     }
   };
 

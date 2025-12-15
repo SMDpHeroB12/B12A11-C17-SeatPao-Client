@@ -5,81 +5,106 @@ const AdvertiseTickets = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch approved tickets
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/admin/advertise-list`)
+  // Fetch all tickets
+  const fetchTickets = () => {
+    setLoading(true);
+    fetch(`${import.meta.env.VITE_API_URL}/admin/tickets`)
       .then((res) => res.json())
       .then((data) => {
-        setTickets(data);
+        // only approved tickets
+        const approved = data.filter((t) => t.status === "approved");
+        setTickets(approved);
         setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
-
-  // Toggle Advertise
-  const toggleAd = (id) => {
-    fetch(`${import.meta.env.VITE_API_URL}/admin/advertise/${id}`, {
-      method: "PATCH",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) return toast.error(data.error);
-
-        toast.success("Updated");
-
-        setTickets((prev) =>
-          prev.map((t) =>
-            t._id === id ? { ...t, advertised: !t.advertised } : t
-          )
-        );
       });
   };
 
+  useEffect(() => {
+    fetchTickets();
+  }, []);
+
+  // Advertise toggle
+  const handleAdvertise = async (ticketId, currentState) => {
+    const advertisedCount = tickets.filter((t) => t.advertised).length;
+
+    if (!currentState && advertisedCount >= 6) {
+      return toast.error("You can advertise maximum 6 tickets");
+    }
+
+    await fetch(
+      `${import.meta.env.VITE_API_URL}/admin/tickets/advertise/${ticketId}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ advertised: !currentState }),
+      }
+    );
+
+    toast.success(!currentState ? "Ticket advertised" : "Ticket unadvertised");
+    fetchTickets();
+  };
+
   if (loading) {
-    return <p className="text-center text-xl py-10">Loading Tickets...</p>;
+    return (
+      <div className="flex justify-center py-20">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
   }
 
   return (
     <div>
       <h2 className="text-2xl font-bold mb-6">Advertise Tickets</h2>
 
-      {tickets.length === 0 ? (
-        <p>No approved tickets available.</p>
-      ) : (
-        <div className="overflow-x-auto mt-5">
-          <table className="table w-full">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Title</th>
-                <th>Route</th>
-                <th>Price</th>
-                <th>Advertise</th>
+      <div className="overflow-x-auto">
+        <table className="table table-zebra">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Image</th>
+              <th>Title</th>
+              <th>Route</th>
+              <th>Price</th>
+              <th>Advertise</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {tickets.map((ticket, idx) => (
+              <tr key={ticket._id}>
+                <td>{idx + 1}</td>
+                <td>
+                  <img
+                    src={ticket.image}
+                    alt="ticket"
+                    className="w-16 h-10 rounded object-cover"
+                  />
+                </td>
+                <td>{ticket.title}</td>
+                <td>
+                  {ticket.from} → {ticket.to}
+                </td>
+                <td>৳{ticket.price}</td>
+                <td>
+                  <input
+                    type="checkbox"
+                    className="toggle toggle-success"
+                    checked={ticket.advertised === true}
+                    onChange={() =>
+                      handleAdvertise(ticket._id, ticket.advertised)
+                    }
+                  />
+                </td>
               </tr>
-            </thead>
+            ))}
+          </tbody>
+        </table>
 
-            <tbody>
-              {tickets.map((t, index) => (
-                <tr key={t._id}>
-                  <td>{index + 1}</td>
-                  <td>{t.title}</td>
-                  <td>{t.route}</td>
-                  <td>৳{t.price}</td>
-
-                  <td>
-                    <input
-                      type="checkbox"
-                      className="toggle toggle-primary"
-                      checked={t.advertised === true}
-                      onChange={() => toggleAd(t._id)}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+        {tickets.length === 0 && (
+          <p className="text-center py-10 text-gray-500">
+            No approved tickets found.
+          </p>
+        )}
+      </div>
     </div>
   );
 };

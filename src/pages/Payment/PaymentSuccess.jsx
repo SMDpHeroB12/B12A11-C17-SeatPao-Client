@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+// src/pages/Payment/PaymentSuccess.jsx
+import { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
@@ -6,7 +7,6 @@ const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get("session_id");
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!sessionId) {
@@ -37,15 +37,13 @@ const PaymentSuccess = () => {
         console.error("Confirm payment error:", err);
         toast.error("Server error");
         navigate("/dashboard/my-bookings");
-      } finally {
-        setLoading(false);
       }
     })();
   }, [sessionId, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      {loading ? <p>Confirming payment...</p> : <p>Redirecting...</p>}
+      <p>Confirming payment...</p>
     </div>
   );
 };

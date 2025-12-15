@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import TicketCard from "../components/Shared/TicketCard";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const AllTickets = () => {
   const [tickets, setTickets] = useState([]);
@@ -38,8 +39,8 @@ const AllTickets = () => {
     if (type !== "all") {
       data = data.filter((t) => {
         // normalize type strings (bus/train/launch/air)
-        const ttype = (t.type || "").toString().toLowerCase();
-        return ttype === type.toLowerCase();
+        const type = (t.type || "").toString().toLowerCase();
+        return type === type.toLowerCase();
       });
     }
 
@@ -50,6 +51,7 @@ const AllTickets = () => {
     return (
       <div className="w-11/12 mx-auto py-10 text-center">
         <p className="text-xl">Loading tickets...</p>
+        <LoadingSpinner></LoadingSpinner>
       </div>
     );
   }

@@ -6,6 +6,7 @@ import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-hot-toast";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
@@ -94,7 +95,10 @@ const Profile = () => {
       </div>
 
       {loadingRole ? (
-        <p>Loading...</p>
+        <div>
+          <p>Loading...</p>
+          <LoadingSpinner></LoadingSpinner>
+        </div>
       ) : (
         <div className="bg-base-100 p-5 rounded-lg shadow-sm space-y-6">
           <div className="flex items-center gap-6">

@@ -1,81 +1,86 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
-import LoadingSpinner from "../../../components/LoadingSpinner";
-import Swal from "sweetalert2";
+import { toast } from "react-hot-toast";
 
 const RequestedBookings = () => {
   const { user } = useContext(AuthContext);
-
-  const [requests, setRequests] = useState([]);
+  const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Load Pending Booking Requests for Vendor
+  // Fetch all bookings, then filter vendor-wise
   useEffect(() => {
     if (!user?.email) return;
 
-    fetch(`${import.meta.env.VITE_API_URL}/vendor/requests?email=${user.email}`)
+    fetch(`${import.meta.env.VITE_API_URL}/bookings?email=all`)
       .then((res) => res.json())
       .then((data) => {
-        setRequests(data);
+        const vendorBookings = data.filter(
+          (booking) => booking.vendorEmail === user.email
+        );
+        setBookings(vendorBookings);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        toast.error("Failed to load requested bookings");
+        setLoading(false);
+      });
   }, [user?.email]);
 
-  // ACCEPT Booking
-  const handleAccept = (id) => {
-    Swal.fire({
-      title: "Accept Booking?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Accept",
-    }).then((result) => {
-      if (!result.isConfirmed) return;
+  const handleAccept = async (id) => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/bookings/accept/${id}`,
+        {
+          method: "PATCH",
+        }
+      );
 
-      fetch(`${import.meta.env.VITE_API_URL}/vendor/requests/accept/${id}`, {
-        method: "PATCH",
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.modifiedCount > 0) {
-            Swal.fire("Accepted!", "Booking accepted!", "success");
+      const data = await res.json();
 
-            setRequests(requests.filter((r) => r._id !== id));
-          }
-        });
-    });
+      if (data.success) {
+        toast.success("Booking accepted");
+        setBookings((prev) =>
+          prev.map((b) => (b._id === id ? { ...b, status: "accepted" } : b))
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to accept booking");
+    }
   };
 
-  // REJECT Booking
-  const handleReject = (id) => {
-    Swal.fire({
-      title: "Reject Booking?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Reject",
-    }).then((result) => {
-      if (!result.isConfirmed) return;
+  const handleReject = async (id) => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/bookings/reject/${id}`,
+        {
+          method: "PATCH",
+        }
+      );
 
-      fetch(`${import.meta.env.VITE_API_URL}/vendor/requests/reject/${id}`, {
-        method: "PATCH",
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.modifiedCount > 0) {
-            Swal.fire("Rejected!", "Booking rejected!", "success");
+      const data = await res.json();
 
-            setRequests(requests.filter((r) => r._id !== id));
-          }
-        });
-    });
+      if (data.success) {
+        toast.success("Booking rejected");
+        setBookings((prev) =>
+          prev.map((b) => (b._id === id ? { ...b, status: "rejected" } : b))
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to reject booking");
+    }
   };
 
   if (loading) {
+    return <p className="text-center py-10">Loading requests...</p>;
+  }
+
+  if (!bookings.length) {
     return (
-      <div className="text-center text-xl py-10">
-        Loading Requested Bookings...
-        <LoadingSpinner />
-      </div>
+      <p className="text-center py-10 text-gray-500">
+        No booking requests yet.
+      </p>
     );
   }
 
@@ -83,55 +88,74 @@ const RequestedBookings = () => {
     <div>
       <h2 className="text-2xl font-bold mb-6">Requested Bookings</h2>
 
-      {requests.length === 0 ? (
-        <p>No new booking requests.</p>
-      ) : (
-        <div className="overflow-x-auto rounded-lg shadow bg-base-200 p-4">
-          <table className="table w-full">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>User</th>
-                <th>Ticket</th>
-                <th>Qty</th>
-                <th>Total (৳)</th>
-                <th className="text-center">Actions</th>
+      <div className="overflow-x-auto">
+        <table className="table table-zebra">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Ticket</th>
+              <th>User</th>
+              <th>Qty</th>
+              <th>Total</th>
+              <th>Departure</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {bookings.map((booking, index) => (
+              <tr key={booking._id}>
+                <td>{index + 1}</td>
+                <td>{booking.ticketTitle}</td>
+                <td>{booking.userEmail}</td>
+                <td>{booking.quantity}</td>
+                <td>৳{booking.totalPrice}</td>
+                <td>
+                  {booking.departureDate} {booking.departureTime}
+                </td>
+                <td>
+                  <span
+                    className={`badge ${
+                      booking.status === "paid"
+                        ? "badge-success"
+                        : booking.status === "accepted"
+                        ? "badge-info"
+                        : booking.status === "rejected"
+                        ? "badge-error"
+                        : "badge-warning"
+                    }`}
+                  >
+                    {booking.status}
+                  </span>
+                </td>
+                <td className="space-x-2">
+                  {booking.status === "pending" && (
+                    <>
+                      <button
+                        onClick={() => handleAccept(booking._id)}
+                        className="btn btn-xs btn-success"
+                      >
+                        Accept
+                      </button>
+                      <button
+                        onClick={() => handleReject(booking._id)}
+                        className="btn btn-xs btn-error"
+                      >
+                        Reject
+                      </button>
+                    </>
+                  )}
+
+                  {booking.status !== "pending" && (
+                    <span className="text-sm opacity-60">No Action</span>
+                  )}
+                </td>
               </tr>
-            </thead>
-
-            <tbody>
-              {requests.map((b, index) => (
-                <tr key={b._id}>
-                  <td>{index + 1}</td>
-                  <td>
-                    <p className="font-medium">{b.userName}</p>
-                    <p className="text-sm opacity-70">{b.userEmail}</p>
-                  </td>
-                  <td>{b.ticketTitle}</td>
-                  <td>{b.quantity}</td>
-                  <td>৳{b.total}</td>
-
-                  <td className="text-center flex gap-3 justify-center">
-                    <button
-                      onClick={() => handleAccept(b._id)}
-                      className="btn btn-sm btn-success"
-                    >
-                      Accept
-                    </button>
-
-                    <button
-                      onClick={() => handleReject(b._id)}
-                      className="btn btn-sm btn-error"
-                    >
-                      Reject
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

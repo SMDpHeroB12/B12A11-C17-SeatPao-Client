@@ -12,7 +12,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/admin/stats`)
+    fetch(`${import.meta.env.VITE_API_URL}/dashboard/admin`)
       .then((res) => res.json())
       .then((data) => {
         setStats(data);

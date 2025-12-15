@@ -7,7 +7,7 @@ const AddTicket = () => {
   const [loading, setLoading] = useState(false);
 
   // perks list example:
-  const perksList = ["AC", "Foods", "WiFi", "Extra Legroom"];
+  const perksList = ["AC", "Foods", "WiFi", "Charging", "Recliner"];
 
   const handleAddTicket = async (e) => {
     e.preventDefault();
@@ -187,7 +187,7 @@ const AddTicket = () => {
         <div>
           <label className="font-medium">Perks</label>
           <div className="flex flex-wrap gap-3 mt-2">
-            {["AC", "Foods", "WiFi", "Extra Legroom"].map((p) => (
+            {["AC", "Foods", "WiFi", "Charging", "Recliner"].map((p) => (
               <label key={p} className="cursor-pointer">
                 <input type="checkbox" name={`perk_${p}`} className="mr-2" />{" "}
                 {p}

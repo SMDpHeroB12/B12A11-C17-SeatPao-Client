@@ -1,66 +1,48 @@
 import { useContext, useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
 import { AuthContext } from "../../providers/AuthProvider";
+import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import LoadingSpinner from "../../components/LoadingSpinner";
 
 const MyBookings = () => {
   const { user } = useContext(AuthContext);
   const [bookings, setBookings] = useState([]);
-  const [ticketsMap, setTicketsMap] = useState({});
   const [loading, setLoading] = useState(true);
 
-  // Load bookings
+  // Fetch user bookings
   useEffect(() => {
     if (!user?.email) return;
-    setLoading(true);
 
     fetch(`${import.meta.env.VITE_API_URL}/bookings?email=${user.email}`)
       .then((res) => res.json())
-      .then(async (data) => {
-        const arr = Array.isArray(data) ? data : [];
-        setBookings(arr);
-
-        // fetch related ticket details for each booking (to show image, route, departure)
-        const uniqueTicketIds = [
-          ...new Set(arr.map((b) => b.ticketId).filter(Boolean)),
-        ];
-
-        const map = {};
-        await Promise.all(
-          uniqueTicketIds.map(async (tid) => {
-            try {
-              const res = await fetch(
-                `${import.meta.env.VITE_API_URL}/tickets/${tid}`
-              );
-              const t = await res.json();
-              map[tid] = t;
-            } catch (err) {
-              map[tid] = null;
-            }
-          })
-        );
-
-        setTicketsMap(map);
+      .then((data) => {
+        setBookings(data);
+        setLoading(false);
       })
-      .catch((err) => {
-        console.error("Fetch bookings error:", err);
-      })
-      .finally(() => setLoading(false));
+      .catch(() => {
+        toast.error("Failed to load bookings");
+        setLoading(false);
+      });
   }, [user?.email]);
 
-  // Helper: calculate if departure passed
-  const isDeparted = (ticket) => {
-    if (!ticket) return false;
-    let dep = null;
-    if (ticket.date && ticket.time)
-      dep = new Date(`${ticket.date}T${ticket.time}`);
-    else if (ticket.departure) dep = new Date(ticket.departure);
-    if (!dep) return false;
-    return dep.getTime() <= Date.now();
+  // Countdown calculation
+  const getCountdown = (date, time) => {
+    const departure = new Date(`${date}T${time}`);
+    const now = new Date();
+    const diff = departure - now;
+
+    if (diff <= 0) return null;
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
   };
 
-  // Create Checkout Session and redirect
-  const handlePayNow = async (bookingId) => {
+  // Stripe checkout
+  const handlePay = async (bookingId) => {
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/payments/create-checkout-session`,
@@ -70,29 +52,35 @@ const MyBookings = () => {
           body: JSON.stringify({ bookingId }),
         }
       );
+
       const data = await res.json();
-      if (data.url) {
-        // redirect to Stripe Checkout
+
+      if (data?.url) {
         window.location.href = data.url;
       } else {
-        toast.error(data.error || "Failed to create checkout session");
+        toast.error("Payment session failed");
       }
     } catch (err) {
-      console.error("Create session error:", err);
-      toast.error("Server error creating checkout session");
+      console.error(err);
+      toast.error("Payment error");
     }
   };
 
   if (loading) {
     return (
-      <div className="text-center py-10">
-        <LoadingSpinner />
+      <div>
+        <p className="text-center py-10">Loading bookings...</p>
+        <LoadingSpinner></LoadingSpinner>
       </div>
     );
   }
 
-  if (bookings.length === 0) {
-    return <p className="text-center py-10">You have no bookings yet.</p>;
+  if (!bookings.length) {
+    return (
+      <p className="text-center py-10 text-gray-500">
+        You have no bookings yet.
+      </p>
+    );
   }
 
   return (
@@ -100,131 +88,96 @@ const MyBookings = () => {
       <h2 className="text-2xl font-bold mb-6">My Booked Tickets</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {bookings.map((b) => {
-          const t = ticketsMap[b.ticketId] || {};
-          const departed = isDeparted(t);
-          const showCountdown = !departed && b.status !== "rejected";
-          // compute total (booking already has total)
-          const total = b.total || (b.price || 0) * (b.quantity || 0);
+        {bookings.map((booking) => {
+          const countdown = getCountdown(
+            booking.departureDate,
+            booking.departureTime
+          );
+
+          const isExpired =
+            new Date(`${booking.departureDate}T${booking.departureTime}`) <
+            new Date();
 
           return (
-            <div key={b._id} className="p-4 bg-base-200 rounded-xl shadow">
-              <div className="flex gap-4">
-                <img
-                  src={t.image || "/default-ticket.jpg"}
-                  alt={b.ticketTitle}
-                  className="w-28 h-20 object-cover rounded"
-                />
-                <div className="flex-1">
-                  <h3 className="font-semibold">{b.ticketTitle}</h3>
-                  <p className="text-sm opacity-70">
-                    {t.route || (t.from && t.to ? `${t.from} → ${t.to}` : "")}
+            <div
+              key={booking._id}
+              className="border border-gray-200 rounded-xl p-4 shadow-sm bg-base-100 flex flex-col justify-between"
+            >
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">{booking.ticketTitle}</h3>
+
+                <img src={booking.ticketImage || booking.image} alt="" />
+
+                <p className="text-sm opacity-70">
+                  {booking.from} → {booking.to}
+                </p>
+
+                <p className="text-sm">
+                  <strong>Quantity:</strong> {booking.quantity}
+                </p>
+
+                <p className="text-sm">
+                  <strong>Total:</strong> ৳{booking.totalPrice}
+                </p>
+
+                <p className="text-sm">
+                  <strong>Departure:</strong> {booking.departureDate}{" "}
+                  {booking.departureTime}
+                </p>
+
+                {/* STATUS */}
+                <span
+                  className={`badge ${
+                    booking.status === "paid"
+                      ? "badge-success"
+                      : booking.status === "accepted"
+                      ? "badge-info"
+                      : booking.status === "rejected"
+                      ? "badge-error"
+                      : "badge-warning"
+                  }`}
+                >
+                  {booking.status}
+                </span>
+
+                {/* COUNTDOWN */}
+                {countdown && booking.status !== "rejected" && (
+                  <p className="text-sm text-primary mt-2">⏳ {countdown}</p>
+                )}
+
+                {booking.status === "rejected" && (
+                  <p className="text-sm text-red-500 mt-2">
+                    ❌ Booking rejected by vendor
                   </p>
-
-                  <p className="text-sm mt-2">
-                    Quantity: <span className="font-medium">{b.quantity}</span>
-                  </p>
-
-                  <p className="text-sm">
-                    Total: <span className="font-medium">৳{total}</span>
-                  </p>
-
-                  <p className="text-sm mt-1">
-                    Departure:{" "}
-                    {t.date
-                      ? `${t.date} ${t.time || ""}`
-                      : t.departure
-                      ? new Date(t.departure).toLocaleString()
-                      : "TBD"}
-                  </p>
-
-                  <p className="mt-2">
-                    Status:{" "}
-                    <span
-                      className={`badge ${
-                        b.status === "paid"
-                          ? "badge-success"
-                          : b.status === "accepted"
-                          ? "badge-primary"
-                          : b.status === "rejected"
-                          ? "badge-error"
-                          : "badge-neutral"
-                      }`}
-                    >
-                      {b.status || (b.paid ? "paid" : "pending")}
-                    </span>
-                  </p>
-
-                  {/* Countdown */}
-                  {showCountdown ? (
-                    <Countdown ticket={t} />
-                  ) : b.status === "rejected" ? (
-                    <p className="text-sm opacity-70 mt-2">Booking rejected.</p>
-                  ) : departed ? (
-                    <p className="text-sm opacity-70 mt-2">Departure passed.</p>
-                  ) : null}
-
-                  {/* Pay Now button */}
-                  <div className="mt-3">
-                    {b.status === "accepted" && !b.paid ? (
-                      <button
-                        onClick={() => handlePayNow(b._id)}
-                        className="btn btn-primary btn-sm"
-                        disabled={departed}
-                      >
-                        Pay Now
-                      </button>
-                    ) : b.paid ? (
-                      <button className="btn btn-ghost btn-sm" disabled>
-                        Paid
-                      </button>
-                    ) : null}
-                  </div>
-                </div>
+                )}
               </div>
+
+              {/* PAY NOW */}
+              {booking.status === "accepted" && !booking.paid && (
+                <button
+                  onClick={() => handlePay(booking._id)}
+                  disabled={isExpired}
+                  className={`btn btn-sm mt-4 ${
+                    isExpired ? "btn-disabled" : "btn-primary"
+                  }`}
+                >
+                  {isExpired ? "Expired" : "Pay Now"}
+                </button>
+              )}
+
+              {booking.status === "paid" && (
+                <Link
+                  to="/dashboard/transactions"
+                  className="btn btn-success btn-sm mt-4"
+                >
+                  View Transaction
+                </Link>
+              )}
             </div>
           );
         })}
       </div>
     </div>
-  );
-};
-
-// small countdown component that accepts ticket object
-const Countdown = ({ ticket }) => {
-  const [timeLeft, setTimeLeft] = useState(null);
-
-  useEffect(() => {
-    if (!ticket) return;
-    let dep = null;
-    if (ticket.date && ticket.time)
-      dep = new Date(`${ticket.date}T${ticket.time}`);
-    else if (ticket.departure) dep = new Date(ticket.departure);
-    if (!dep) return;
-
-    const update = () => {
-      const diff = dep.getTime() - Date.now();
-      if (diff <= 0) {
-        setTimeLeft(null);
-        return;
-      }
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
-      setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
-    };
-
-    update();
-    const timer = setInterval(update, 1000);
-    return () => clearInterval(timer);
-  }, [ticket]);
-
-  if (!timeLeft) return null;
-  return (
-    <p className="text-sm mt-2">
-      Countdown: <span className="font-medium">{timeLeft}</span>
-    </p>
   );
 };
 
