@@ -102,7 +102,7 @@ const ManageTickets = () => {
                   </span>
                 </td>
 
-                <td className=" flex gap-3">
+                <td className=" flex gap-3 justify-center items-center">
                   <button
                     disabled={t.status !== "pending"}
                     onClick={() => handleApprove(t._id)}

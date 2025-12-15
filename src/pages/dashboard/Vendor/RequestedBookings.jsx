@@ -135,7 +135,7 @@ const RequestedBookings = () => {
                     {booking.status}
                   </span>
                 </td>
-                <td className="space-x-2">
+                <td className="flex gap-3 justify-center items-center">
                   {booking.status === "pending" && (
                     <>
                       <button

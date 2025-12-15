@@ -187,6 +187,18 @@ const TicketDetails = () => {
         {/* Left */}
         <div className="bg-base-200 p-6 rounded-xl shadow">
           <h2 className="text-3xl font-bold mb-2">{ticket.title}</h2>
+          <div className="flex flex-wrap gap-2 mt-3">
+            {(Array.isArray(ticket.perks) ? ticket.perks : []).map(
+              (perk, index) => (
+                <span
+                  key={index}
+                  className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full"
+                >
+                  {perk}
+                </span>
+              )
+            )}
+          </div>
           <p className="text-lg opacity-80 mb-3">{ticket.route}</p>
           <p className="text-lg opacity-80 mb-3 font-bold rounded-sm w-15 text-center bg-accent">
             {ticket.type}
@@ -201,12 +213,16 @@ const TicketDetails = () => {
             <span className="font-medium">{availableSeats}</span>
           </p>
 
-          <p className="mt-2">
+          <p className="mt-2 ">
             Departure:
             {departureDateTime ? (
               <>
-                {departureDateTime.toLocaleDateString()}{" "}
-                {departureDateTime.toLocaleTimeString()}
+                <div className="flex gap-5">
+                  <p>{departureDateTime.toLocaleDateString()}</p>
+                  <p className="font-bold">
+                    {departureDateTime.toLocaleTimeString()}
+                  </p>
+                </div>
               </>
             ) : (
               "TBD"

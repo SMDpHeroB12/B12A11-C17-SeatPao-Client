@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../providers/AuthProvider";
 import { Navigate } from "react-router-dom";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const AdminRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);

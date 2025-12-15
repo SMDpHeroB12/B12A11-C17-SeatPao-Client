@@ -30,7 +30,6 @@ import VendorDashboard from "../pages/dashboard/Vendor/VendorDashboard";
 
 import TicketDetails from "../pages/TicketDetails/TicketDetails";
 
-// import MyTickets from "../pages/dashboard/Vendor/MyTickets";
 import RequestedBookings from "../pages/dashboard/Vendor/RequestedBookings";
 import RevenueOverview from "../pages/dashboard/Vendor/RevenueOverview";
 import AdvertiseTickets from "../pages/dashboard/admin/AdvertiseTickets";

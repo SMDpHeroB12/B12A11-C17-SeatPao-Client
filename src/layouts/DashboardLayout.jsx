@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../providers/AuthProvider";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const DashboardLayout = () => {
   const { user } = useContext(AuthContext);
@@ -23,7 +24,8 @@ const DashboardLayout = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center text-xl">
-        Loading Dashboard...
+        <p>Loading Dashboard...</p>
+        <LoadingSpinner></LoadingSpinner>
       </div>
     );
   }
