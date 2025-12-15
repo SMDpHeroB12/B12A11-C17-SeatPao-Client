@@ -22,12 +22,27 @@ const Register = () => {
     const password = form.password.value;
     const confirm = form.confirm.value;
 
-    // Validations
+    // PASSWORD VALIDATION =================
+
+    // Length check
     if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
+      setError("Password must be at least 6 characters long.");
       return;
     }
 
+    // Uppercase check
+    if (!/[A-Z]/.test(password)) {
+      setError("Password must contain at least one uppercase letter.");
+      return;
+    }
+
+    // Lowercase check
+    if (!/[a-z]/.test(password)) {
+      setError("Password must contain at least one lowercase letter.");
+      return;
+    }
+
+    // Confirm password match
     if (password !== confirm) {
       setError("Passwords do not match.");
       return;
@@ -93,15 +108,13 @@ const Register = () => {
           Create an Account
         </h2>
 
-        {error && <p className="text-red-500 text-center mb-3">{error}</p>}
-
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
             <label className="font-medium">Full Name</label>
             <input
               type="text"
               name="name"
-              className="input input-bordered w-full mt-1"
+              className="input w-full mt-1"
               placeholder="Enter your name"
               required
             />
@@ -112,7 +125,7 @@ const Register = () => {
             <input
               type="text"
               name="photo"
-              className="input input-bordered w-full mt-1"
+              className="input w-full mt-1"
               placeholder="Your photo link"
             />
           </div>
@@ -122,7 +135,7 @@ const Register = () => {
             <input
               type="email"
               name="email"
-              className="input input-bordered w-full mt-1"
+              className="input  w-full mt-1"
               placeholder="Enter your email"
               required
             />
@@ -133,7 +146,7 @@ const Register = () => {
             <input
               type="password"
               name="password"
-              className="input input-bordered w-full mt-1"
+              className="input w-full mt-1"
               placeholder="Enter password"
               required
             />
@@ -144,12 +157,12 @@ const Register = () => {
             <input
               type="password"
               name="confirm"
-              className="input input-bordered w-full mt-1"
+              className="input w-full mt-1"
               placeholder="Confirm password"
               required
             />
           </div>
-
+          {error && <p className="text-red-500 text-center mb-3">{error}</p>}
           <button type="submit" className="btn btn-primary w-full mt-3">
             Create Account
           </button>

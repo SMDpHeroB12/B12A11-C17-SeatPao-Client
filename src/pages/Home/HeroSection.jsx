@@ -25,7 +25,7 @@ const HeroSection = () => {
             Book Your Journey With <span className="text-primary">SeatPao</span>
           </h1>
 
-          <p className="py-5 text-gray-600 dark:text-gray-300 max-w-md">
+          <p className="py-5 text-gray-600 dark:text-gray-300 max-w-md hind-siliguri">
             Bus, Train, Launch, Flight — সব ধরনের টিকেট এখন এক প্ল্যাটফর্মে।
             সহজ, দ্রুত, নিরাপদ!
           </p>
@@ -33,10 +33,6 @@ const HeroSection = () => {
           <div className="flex gap-3">
             <Link to="/tickets">
               <button className="btn btn-primary">Book Tickets</button>
-            </Link>
-
-            <Link to="/register">
-              <button className="btn btn-outline">Join Now</button>
             </Link>
           </div>
         </motion.div>

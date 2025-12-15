@@ -29,8 +29,8 @@ const Navbar = () => {
         <NavLink
           to="/"
           className={({ isActive }) =>
-            `px-3 py-2 rounded-md hover:bg-base-100 ${
-              isActive ? "bg-base-100 font-medium" : ""
+            `px-3 py-2 rounded-md hover:bg-base-200 ${
+              isActive ? "bg-base-300 font-medium" : ""
             }`
           }
         >
@@ -41,8 +41,8 @@ const Navbar = () => {
         <NavLink
           to="/tickets"
           className={({ isActive }) =>
-            `px-3 py-2 rounded-md hover:bg-base-100 ${
-              isActive ? "bg-base-100 font-medium" : ""
+            `px-3 py-2 rounded-md hover:bg-base-200 ${
+              isActive ? "bg-base-300 font-medium" : ""
             }`
           }
         >
@@ -55,8 +55,8 @@ const Navbar = () => {
           <NavLink
             to="/dashboard"
             className={({ isActive }) =>
-              `px-3 py-2 rounded-md hover:bg-base-100 ${
-                isActive ? "bg-base-100 font-medium" : ""
+              `px-3 py-2 rounded-md hover:bg-base-200 ${
+                isActive ? "bg-base-300 font-medium" : ""
               }`
             }
           >
