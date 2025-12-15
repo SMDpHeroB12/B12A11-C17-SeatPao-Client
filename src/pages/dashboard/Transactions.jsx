@@ -32,28 +32,30 @@ const Transactions = () => {
       {transactions.length === 0 ? (
         <p>No transactions found.</p>
       ) : (
-        <table className="table table-zebra">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Transaction ID</th>
-              <th>Ticket</th>
-              <th>Amount</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.map((t, i) => (
-              <tr key={t._id}>
-                <td>{i + 1}</td>
-                <td className="text-xs">{t.transactionId}</td>
-                <td>{t.ticketTitle}</td>
-                <td>৳{t.amount}</td>
-                <td>{new Date(t.paymentDate).toLocaleDateString()}</td>
+        <div className="overflow-x-auto">
+          <table className="table table-zebra">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Transaction ID</th>
+                <th>Ticket</th>
+                <th>Amount</th>
+                <th>Date</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {transactions.map((t, i) => (
+                <tr key={t._id}>
+                  <td>{i + 1}</td>
+                  <td className="text-xs">{t.transactionId}</td>
+                  <td>{t.ticketTitle}</td>
+                  <td>৳{t.amount}</td>
+                  <td>{new Date(t.paymentDate).toLocaleDateString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
