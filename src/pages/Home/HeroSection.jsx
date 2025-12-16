@@ -10,15 +10,15 @@ const HeroSection = () => {
           src="https://i.ibb.co.com/KcS9cjYD/ticket-booking.png"
           alt="Ticket Booking"
           className="max-w-full sm:max-w-sm rounded-lg "
-          initial={{ opacity: 0, x: 80 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         />
 
         {/* Hero Text */}
         <motion.div
-          initial={{ opacity: 0, x: -80 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: -80 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           <h1 className="text-4xl md:text-5xl font-bold leading-tight">
