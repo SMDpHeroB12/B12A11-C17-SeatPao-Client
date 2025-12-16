@@ -11,6 +11,7 @@ const MyBookings = () => {
 
   // Fetch user bookings
   useEffect(() => {
+    document.title = "SeatPao | My-Bookings";
     if (!user?.email) return;
 
     fetch(`${import.meta.env.VITE_API_URL}/bookings?email=${user.email}`)

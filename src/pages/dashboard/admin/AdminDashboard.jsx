@@ -12,6 +12,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    document.title = "SeatPao | Admin Dashboard";
     fetch(`${import.meta.env.VITE_API_URL}/dashboard/admin`)
       .then((res) => res.json())
       .then((data) => {

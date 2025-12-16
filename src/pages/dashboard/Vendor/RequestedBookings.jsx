@@ -10,6 +10,7 @@ const RequestedBookings = () => {
 
   // Fetch all bookings, then filter vendor-wise
   useEffect(() => {
+    document.title = "SeatPao | Requested Bookings";
     if (!user?.email) return;
 
     fetch(`${import.meta.env.VITE_API_URL}/bookings?email=all`)
@@ -135,27 +136,29 @@ const RequestedBookings = () => {
                     {booking.status}
                   </span>
                 </td>
-                <td className="flex gap-3 justify-center items-center">
-                  {booking.status === "pending" && (
-                    <>
-                      <button
-                        onClick={() => handleAccept(booking._id)}
-                        className="btn btn-xs btn-success"
-                      >
-                        Accept
-                      </button>
-                      <button
-                        onClick={() => handleReject(booking._id)}
-                        className="btn btn-xs btn-error"
-                      >
-                        Reject
-                      </button>
-                    </>
-                  )}
+                <td>
+                  <div className="flex gap-3 justify-center items-center ">
+                    {booking.status === "pending" && (
+                      <>
+                        <button
+                          onClick={() => handleAccept(booking._id)}
+                          className="btn btn-success"
+                        >
+                          Accept
+                        </button>
+                        <button
+                          onClick={() => handleReject(booking._id)}
+                          className="btn btn-error"
+                        >
+                          Reject
+                        </button>
+                      </>
+                    )}
 
-                  {booking.status !== "pending" && (
-                    <span className="text-sm opacity-60">No Action</span>
-                  )}
+                    {booking.status !== "pending" && (
+                      <span className="text-sm opacity-60">No Action</span>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}

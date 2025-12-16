@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { toast } from "react-hot-toast";
 
@@ -81,6 +81,9 @@ const AddTicket = () => {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    document.title = "SeatPao | Add Tickets";
+  }, []);
 
   return (
     <div>

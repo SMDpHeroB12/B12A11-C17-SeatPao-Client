@@ -19,6 +19,7 @@ const AdvertiseTickets = () => {
   };
 
   useEffect(() => {
+    document.title = "SeatPao | Advertise Tickets";
     fetchTickets();
   }, []);
 
@@ -45,7 +46,8 @@ const AdvertiseTickets = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-20">
+      <div className="flex flex-col justify-center items-center py-20">
+        <p>Loading Tickets List </p>
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );

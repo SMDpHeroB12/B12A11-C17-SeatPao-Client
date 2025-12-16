@@ -11,6 +11,7 @@ const DashboardLayout = () => {
 
   // Fetch User Role From MongoDB
   useEffect(() => {
+    document.title = "SeatPao | Dashboard";
     if (!user?.email) return;
 
     fetch(`${import.meta.env.VITE_API_URL}/users/${user.email}`)

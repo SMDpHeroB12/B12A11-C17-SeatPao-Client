@@ -21,6 +21,7 @@ const MyAddedTickets = () => {
   };
 
   useEffect(() => {
+    document.title = "SeatPao | My Added Tickets";
     fetchTickets();
   }, []);
 

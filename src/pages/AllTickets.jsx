@@ -36,6 +36,7 @@ const AllTickets = () => {
 
   // SEARCH + FILTER + SORT
   useEffect(() => {
+    document.title = "SeatPao | All Tickets";
     let data = [...tickets];
 
     // Search by FROM

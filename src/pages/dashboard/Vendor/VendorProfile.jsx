@@ -6,6 +6,7 @@ const VendorProfile = () => {
   const [vendor, setVendor] = useState(null);
 
   useEffect(() => {
+    document.title = "SeatPao | Vendor Profile";
     if (!user?.email) return;
     fetch(`${import.meta.env.VITE_API_URL}/users/${user.email}`)
       .then((res) => res.json())

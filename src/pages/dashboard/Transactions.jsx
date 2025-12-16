@@ -8,6 +8,7 @@ const Transactions = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    document.title = "SeatPao | Transactions";
     if (!user?.email) return;
 
     fetch(`${import.meta.env.VITE_API_URL}/payments?email=${user.email}`)

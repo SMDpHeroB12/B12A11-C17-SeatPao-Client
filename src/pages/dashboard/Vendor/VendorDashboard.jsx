@@ -15,6 +15,7 @@ const VendorDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    document.title = "SeatPao | Vendor DashBoard";
     if (!user?.email) return;
 
     fetch(`${import.meta.env.VITE_API_URL}/vendor/stats?email=${user.email}`)

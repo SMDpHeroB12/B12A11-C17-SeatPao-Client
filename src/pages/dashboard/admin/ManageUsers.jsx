@@ -17,6 +17,7 @@ const ManageUsers = () => {
   };
 
   useEffect(() => {
+    document.title = "SeatPao | Manage Tickets";
     fetchUsers();
   }, []);
 
@@ -125,7 +126,7 @@ const ManageUsers = () => {
                   {user.role !== "admin" && (
                     <button
                       onClick={() => makeAdmin(user._id)}
-                      className="btn btn-xs btn-primary"
+                      className="btn btn-primary"
                     >
                       Make Admin
                     </button>
@@ -136,7 +137,7 @@ const ManageUsers = () => {
                   {user.role !== "vendor" && (
                     <button
                       onClick={() => makeVendor(user._id)}
-                      className="btn btn-xs btn-info"
+                      className="btn btn-info"
                     >
                       Make Vendor
                     </button>
@@ -147,7 +148,7 @@ const ManageUsers = () => {
                   {user.role === "vendor" && !user.fraud && (
                     <button
                       onClick={() => markFraud(user._id)}
-                      className="btn btn-xs btn-warning"
+                      className="btn btn-warning"
                     >
                       Mark Fraud
                     </button>
@@ -157,7 +158,7 @@ const ManageUsers = () => {
                 <td>
                   <button
                     onClick={() => deleteUser(user._id)}
-                    className="btn btn-xs btn-error text-white"
+                    className="btn btn-sm btn-error text-white"
                   >
                     Delete
                   </button>

@@ -20,6 +20,7 @@ const ManageTickets = () => {
   };
 
   useEffect(() => {
+    document.title = "SeatPao | Manage Tickets";
     fetchTickets();
   }, []);
 
@@ -102,22 +103,24 @@ const ManageTickets = () => {
                   </span>
                 </td>
 
-                <td className=" flex gap-3 justify-center items-center">
-                  <button
-                    disabled={t.status !== "pending"}
-                    onClick={() => handleApprove(t._id)}
-                    className="btn btn-xs btn-success"
-                  >
-                    Approve
-                  </button>
+                <td>
+                  <div className=" flex gap-3 justify-center items-center">
+                    <button
+                      disabled={t.status !== "pending"}
+                      onClick={() => handleApprove(t._id)}
+                      className="btn btn-success"
+                    >
+                      Approve
+                    </button>
 
-                  <button
-                    disabled={t.status !== "pending"}
-                    onClick={() => handleReject(t._id)}
-                    className="btn btn-xs btn-error"
-                  >
-                    Reject
-                  </button>
+                    <button
+                      disabled={t.status !== "pending"}
+                      onClick={() => handleReject(t._id)}
+                      className="btn btn-error"
+                    >
+                      Reject
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

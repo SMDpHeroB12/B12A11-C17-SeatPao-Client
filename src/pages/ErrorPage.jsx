@@ -1,8 +1,12 @@
+import { useEffect } from "react";
 import notFoundPageImage from "../assets/images/notFoundPageImage.gif";
 import { Link, useRouteError } from "react-router";
 
 const ErrorPage = () => {
   const error = useRouteError();
+  useEffect(() => {
+    document.title = "SeatPao | 404 Error";
+  }, []);
   return (
     <div className="h-screen">
       <h1>{error.message}</h1>

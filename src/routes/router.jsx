@@ -78,7 +78,7 @@ const router = createBrowserRouter([
       // Vendor
 
       {
-        path: "/dashboard/vendor",
+        path: "vendor",
         element: (
           <VendorRoute>
             <VendorDashboard />

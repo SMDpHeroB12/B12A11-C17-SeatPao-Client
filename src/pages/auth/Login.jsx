@@ -1,10 +1,12 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../firebase/firebase.config";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 
 const Login = () => {
   const { loginUser, googleLogin } = useContext(AuthContext);
@@ -80,71 +82,77 @@ const Login = () => {
         toast.error(err.message);
       });
   };
-
+  useEffect(() => {
+    document.title = "SeatPao | Log-in";
+  }, []);
   return (
-    <div className="min-h-screen flex justify-center items-center">
-      <div className="w-full max-w-md bg-base-100 shadow-xl p-8 rounded-xl border border-gray-200">
-        <h2 className="text-2xl font-bold text-center mb-6">
-          Login to Your Account
-        </h2>
+    <>
+      <Navbar />
+      <div className="min-h-screen flex justify-center items-center">
+        <div className="w-full max-w-md bg-base-100 shadow-xl p-8 rounded-xl border border-gray-200">
+          <h2 className="text-2xl font-bold text-center mb-6">
+            Login to Your Account
+          </h2>
 
-        {error && <p className="text-red-500 text-center mb-3">{error}</p>}
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="font-medium">Email</label>
+              <input
+                type="email"
+                name="email"
+                onChange={(e) => setResetEmail(e.target.value)}
+                className="input input-bordered w-full mt-1"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="font-medium">Email</label>
-            <input
-              type="email"
-              name="email"
-              onChange={(e) => setResetEmail(e.target.value)}
-              className="input input-bordered w-full mt-1"
-              placeholder="Enter your email"
-              required
-            />
-          </div>
+            <div>
+              <label className="font-medium">Password</label>
+              <input
+                type="password"
+                name="password"
+                className="input input-bordered w-full mt-1"
+                placeholder="Enter password"
+                required
+              />
 
-          <div>
-            <label className="font-medium">Password</label>
-            <input
-              type="password"
-              name="password"
-              className="input input-bordered w-full mt-1"
-              placeholder="Enter password"
-              required
-            />
+              {/* Forgot Password */}
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                className="text-primary text-sm mt-1"
+              >
+                Forgot Password?
+              </button>
+            </div>
 
-            {/* Forgot Password */}
-            <button
-              type="button"
-              onClick={handleForgotPassword}
-              className="text-primary text-sm mt-1"
-            >
-              Forgot Password?
+            {error && <p className="text-red-500 text-center mb-3">{error}</p>}
+
+            <button type="submit" className="btn btn-primary w-full mt-3">
+              Login
             </button>
-          </div>
+          </form>
 
-          <button type="submit" className="btn btn-primary w-full mt-3">
-            Login
+          <div className="divider">OR</div>
+
+          <button
+            onClick={handleGoogle}
+            className="btn  w-full flex items-center gap-3"
+          >
+            <FcGoogle size={22} /> Continue with Google
           </button>
-        </form>
 
-        <div className="divider">OR</div>
-
-        <button
-          onClick={handleGoogle}
-          className="btn btn-outline w-full flex items-center gap-3"
-        >
-          <FcGoogle size={22} /> Continue with Google
-        </button>
-
-        <p className="text-center mt-4">
-          Don’t have an account?
-          <Link to="/register" className="text-primary font-medium">
-            Register Now
-          </Link>
-        </p>
+          <p className="text-center mt-4">
+            Don’t have an account?{" "}
+            <Link to="/register" className="text-primary font-medium">
+              Register Now
+            </Link>
+          </p>
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

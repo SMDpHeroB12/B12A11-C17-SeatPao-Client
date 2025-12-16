@@ -62,8 +62,22 @@ const LatestTicketsSection = () => {
               <div className="text-sm space-y-1">
                 <p>Price: ৳{ticket.price}</p>
                 <p>Quantity: {ticket.seats}</p>
-                <p>Transport: {ticket.transportType}</p>
-                <p className="truncate">Perks: {ticket.perks?.join(", ")}</p>
+                <p>Transport: {ticket.type}</p>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {ticket.perks.length === 0 ? (
+                    <span className="text-sm opacity-70">No perks listed</span>
+                  ) : (
+                    ticket.perks.map((perk, i) => (
+                      <span
+                        key={i}
+                        className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full"
+                      >
+                        {perk}
+                      </span>
+                    ))
+                  )}
+                </div>
+                {/* <p className="truncate">Perks: {ticket.perks?.join(", ")}</p> */}
               </div>
 
               <Link

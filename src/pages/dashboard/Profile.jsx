@@ -34,6 +34,7 @@ const Profile = () => {
 
   // Fetch role from backend
   useEffect(() => {
+    document.title = "SeatPao | My Profile";
     if (!user?.email) {
       setLoadingRole(false);
       return;

@@ -56,6 +56,7 @@ const TicketDetails = () => {
 
   // Countdown effect
   useEffect(() => {
+    document.title = "SeatPao | Ticket Details";
     if (!ticket) {
       setTimeLeft(null);
       return;
