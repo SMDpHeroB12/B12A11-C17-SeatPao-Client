@@ -101,7 +101,7 @@ const Login = () => {
                 type="email"
                 name="email"
                 onChange={(e) => setResetEmail(e.target.value)}
-                className="input input-bordered w-full mt-1"
+                className="input w-full mt-1"
                 placeholder="Enter your email"
                 required
               />
@@ -112,7 +112,7 @@ const Login = () => {
               <input
                 type="password"
                 name="password"
-                className="input input-bordered w-full mt-1"
+                className="input w-full mt-1"
                 placeholder="Enter password"
                 required
               />

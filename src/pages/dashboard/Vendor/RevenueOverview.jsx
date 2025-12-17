@@ -19,7 +19,7 @@ const RevenueOverview = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    document.title = "SeatPao | Requested Bookings";
+    document.title = "SeatPao | Revenue Overview";
     Promise.all([
       fetch(
         `${import.meta.env.VITE_API_URL}/payments?vendor=${user.email}`

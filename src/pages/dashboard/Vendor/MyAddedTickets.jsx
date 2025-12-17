@@ -149,68 +149,91 @@ const MyAddedTickets = () => {
             <h3 className="font-bold text-lg mb-4">Update Ticket</h3>
 
             <form onSubmit={handleUpdate} className="space-y-4">
+              <label className="text-sm">Ticket Title</label>
               <input
                 name="title"
                 defaultValue={selectedTicket.title}
-                className="input input-bordered w-full"
+                className="input w-full"
                 required
               />
 
               <div className="grid grid-cols-2 gap-3">
-                <input
-                  name="from"
-                  defaultValue={selectedTicket.from}
-                  className="input input-bordered"
-                />
-                <input
-                  name="to"
-                  defaultValue={selectedTicket.to}
-                  className="input input-bordered"
-                />
+                <div>
+                  <label className="text-sm">From (Location)</label>
+                  <input
+                    name="from"
+                    defaultValue={selectedTicket.from}
+                    className="input w-full"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm">To (Location)</label>
+                  <input
+                    name="to"
+                    defaultValue={selectedTicket.to}
+                    className="input w-full"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
-                <select
-                  name="type"
-                  defaultValue={selectedTicket.type}
-                  className="select select-bordered"
-                >
-                  <option>bus</option>
-                  <option>train</option>
-                  <option>launch</option>
-                </select>
-
-                <input
-                  type="number"
-                  name="price"
-                  defaultValue={selectedTicket.price}
-                  className="input input-bordered"
-                />
-
-                <input
-                  type="number"
-                  name="seats"
-                  defaultValue={selectedTicket.seats}
-                  className="input input-bordered"
-                />
+                <div>
+                  <label className="text-sm">Transport Type</label>
+                  <select
+                    name="type"
+                    defaultValue={selectedTicket.type}
+                    className="select"
+                  >
+                    <option>bus</option>
+                    <option>train</option>
+                    <option>launch</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-sm">Unit Price</label>
+                  <input
+                    type="number"
+                    name="price"
+                    defaultValue={selectedTicket.price}
+                    className="input "
+                  />
+                </div>
+                <div className="flex flex-col justify-between">
+                  <label className="text-sm">Seats</label>
+                  <input
+                    type="number"
+                    name="seats"
+                    defaultValue={selectedTicket.seats}
+                    className="input"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <input
-                  type="date"
-                  name="date"
-                  defaultValue={selectedTicket.date}
-                  className="input input-bordered"
-                />
-                <input
-                  type="time"
-                  name="time"
-                  defaultValue={selectedTicket.time}
-                  className="input input-bordered"
-                />
+                <div>
+                  <label className="text-sm">Departure Date</label>
+                  <input
+                    type="date"
+                    name="date"
+                    defaultValue={selectedTicket.date}
+                    className="input w-full"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm">Departure Time</label>
+                  <input
+                    type="time"
+                    name="time"
+                    defaultValue={selectedTicket.time}
+                    className="input w-full"
+                  />
+                </div>
               </div>
 
               {/* Perks */}
+
+              <label className="text-sm">Update Perks:</label>
               <div className="grid grid-cols-3 gap-2">
                 {perksList.map((perk) => (
                   <label key={perk} className="flex gap-2">
@@ -227,7 +250,7 @@ const MyAddedTickets = () => {
               {/* Image */}
               <div>
                 <img src={selectedTicket.image} className="h-32 rounded mb-2" />
-                <input type="file" name="image" />
+                <input type="file" name="image" className="file-input w-full" />
                 {uploading && <p className="text-sm">Uploading...</p>}
               </div>
 

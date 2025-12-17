@@ -17,7 +17,7 @@ const ManageUsers = () => {
   };
 
   useEffect(() => {
-    document.title = "SeatPao | Manage Tickets";
+    document.title = "SeatPao | Manage Users";
     fetchUsers();
   }, []);
 

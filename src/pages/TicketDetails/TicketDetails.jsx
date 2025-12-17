@@ -277,7 +277,7 @@ const TicketDetails = () => {
                   max={availableSeats}
                   value={quantity}
                   onChange={(e) => setQuantity(Number(e.target.value))}
-                  className="input input-bordered w-full"
+                  className="input w-full"
                   required
                 />
                 <p className="text-sm opacity-70 mt-1">

@@ -99,7 +99,7 @@ const AddTicket = () => {
           <input
             type="text"
             name="title"
-            className="input input-bordered w-full mt-1"
+            className="input w-full mt-1"
             placeholder="e.g., Dhaka to Chittagong Express"
             required
           />
@@ -112,7 +112,7 @@ const AddTicket = () => {
             <input
               type="text"
               name="from"
-              className="input input-bordered w-full mt-1"
+              className="input w-full mt-1"
               required
             />
           </div>
@@ -121,7 +121,7 @@ const AddTicket = () => {
             <input
               type="text"
               name="to"
-              className="input input-bordered w-full mt-1"
+              className="input w-full mt-1"
               required
             />
           </div>
@@ -130,11 +130,7 @@ const AddTicket = () => {
         {/* Type */}
         <div>
           <label className="font-medium">Transport Type</label>
-          <select
-            name="type"
-            className="select select-bordered w-full mt-1"
-            required
-          >
+          <select name="type" className="select w-full mt-1" required>
             <option value="bus">Bus</option>
             <option value="train">Train</option>
             <option value="plane">Plane</option>
@@ -149,7 +145,7 @@ const AddTicket = () => {
             <input
               type="date"
               name="date"
-              className="input input-bordered w-full mt-1"
+              className="input w-full mt-1"
               required
             />
           </div>
@@ -158,7 +154,7 @@ const AddTicket = () => {
             <input
               type="time"
               name="time"
-              className="input input-bordered w-full mt-1"
+              className="input w-full mt-1"
               required
             />
           </div>
@@ -171,7 +167,7 @@ const AddTicket = () => {
             <input
               type="number"
               name="price"
-              className="input input-bordered w-full mt-1"
+              className="input w-full mt-1"
               required
             />
           </div>
@@ -180,7 +176,7 @@ const AddTicket = () => {
             <input
               type="number"
               name="seats"
-              className="input input-bordered w-full mt-1"
+              className="input w-full mt-1"
               required
             />
           </div>
@@ -206,7 +202,7 @@ const AddTicket = () => {
             type="file"
             name="image"
             accept="image/*"
-            className="file-input file-input-bordered w-full mt-1"
+            className="file-input w-full mt-1"
           />
         </div>
 
@@ -218,7 +214,7 @@ const AddTicket = () => {
               type="text"
               value={user?.displayName || "Vendor"}
               readOnly
-              className="input input-bordered w-full mt-1"
+              className="input w-full mt-1"
             />
           </div>
           <div>
@@ -227,7 +223,7 @@ const AddTicket = () => {
               type="text"
               value={user?.email}
               readOnly
-              className="input input-bordered w-full mt-1"
+              className="input w-full mt-1"
             />
           </div>
         </div>

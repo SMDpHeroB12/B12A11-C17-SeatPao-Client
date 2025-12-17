@@ -132,7 +132,7 @@ const Profile = () => {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="input input-bordered w-full"
+                className="input w-full"
                 placeholder="Your full name"
                 required
               />
@@ -144,7 +144,7 @@ const Profile = () => {
                 type="text"
                 value={photo}
                 onChange={(e) => setPhoto(e.target.value)}
-                className="input input-bordered w-full"
+                className="input w-full"
                 placeholder="https://..."
                 required
               />
