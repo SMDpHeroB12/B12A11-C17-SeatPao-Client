@@ -36,12 +36,14 @@ import AdvertiseTickets from "../pages/dashboard/admin/AdvertiseTickets";
 import PaymentSuccess from "../pages/Payment/PaymentSuccess";
 import PaymentCancel from "../pages/Payment/PaymentCancel";
 import MyAddedTickets from "../pages/dashboard/Vendor/MyAddedTickets";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const router = createBrowserRouter([
   // MAIN WEBSITE LAYOUT =====================
   {
     path: "/",
     element: <MainLayout />,
+    hydrateFallbackElement: <LoadingSpinner />,
     errorElement: <ErrorPage />,
     children: [
       { path: "/", Component: Home },

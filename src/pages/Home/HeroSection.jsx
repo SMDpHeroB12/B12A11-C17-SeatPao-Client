@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
-    <div className="hero min-h-[75vh] bg-base-200 dark:bg-base-300 rounded-xl my-5">
+    <div className="hero min-h-[70vh] bg-base-200 dark:bg-base-300 rounded-xl my-5">
       <div className="hero-content flex-col lg:flex-row-reverse gap-10">
         {/* Hero Image */}
         <motion.img
@@ -25,7 +25,7 @@ const HeroSection = () => {
             Book Your Journey With <span className="text-primary">SeatPao</span>
           </h1>
 
-          <p className="py-5 text-gray-600 dark:text-gray-300 max-w-md hind-siliguri">
+          <p className="py-5 text-gray-500 dark:text-gray-300 max-w-md hind-siliguri">
             Bus, Train, Launch, Flight — সব ধরনের টিকেট এখন এক প্ল্যাটফর্মে।
             সহজ, দ্রুত, নিরাপদ!
           </p>

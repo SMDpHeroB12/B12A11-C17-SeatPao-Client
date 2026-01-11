@@ -4,6 +4,11 @@ import LatestTicketsSection from "./components/LatestTicketsSection";
 import PopularRoutes from "./components/PopularRoutes";
 import WhyChooseUs from "./components/WhyChooseUs";
 import HeroSection from "./HeroSection";
+import CTA from "./components/CTA";
+import HowItWorks from "./components/HowItWorks";
+import Newsletter from "./components/Newsletter";
+import Testimonials from "./components/Testimonials";
+import TransportTypes from "./components/TransportTypes";
 
 const Home = () => {
   useEffect(() => {
@@ -12,11 +17,25 @@ const Home = () => {
 
   return (
     <div>
-      <HeroSection></HeroSection>
+      <HeroSection />
+
+      <HowItWorks />
+
       <PopularRoutes />
-      <AdvertisementSection></AdvertisementSection>
-      <LatestTicketsSection></LatestTicketsSection>
+
+      <TransportTypes />
+
       <WhyChooseUs />
+
+      <LatestTicketsSection />
+
+      <AdvertisementSection />
+
+      <Testimonials />
+
+      <CTA />
+
+      <Newsletter />
     </div>
   );
 };

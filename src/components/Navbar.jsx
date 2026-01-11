@@ -69,7 +69,7 @@ const Navbar = () => {
 
   return (
     <div className="bg-base-100 sticky top-0 shadow z-50">
-      <div className="navbar w-11/12 mx-auto">
+      <div className="navbar lg:w-11/12 mx-auto">
         {/* LEFT */}
         <div className="navbar-start">
           {/* MOBILE MENU */}

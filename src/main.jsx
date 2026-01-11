@@ -14,3 +14,9 @@ createRoot(document.getElementById("root")).render(
     <Toaster position="top-center" reverseOrder={false} />
   </StrictMode>
 );
+window.addEventListener("load", () => {
+  const loader = document.getElementById("global-loader");
+  if (loader) {
+    loader.style.display = "none";
+  }
+});
