@@ -190,7 +190,8 @@ const DashboardLayout = () => {
                     >
                       Admin Profile
                     </NavLink>
-                    {/* <NavLink
+
+                    <NavLink
                       to="/dashboard/admin"
                       className={({ isActive }) =>
                         `px-3 py-2 rounded-md hover:bg-base-100 ${
@@ -199,7 +200,8 @@ const DashboardLayout = () => {
                       }
                     >
                       Admin Dashboard
-                    </NavLink> */}
+                    </NavLink>
+
                     <NavLink
                       to="/dashboard/manage-users"
                       className={({ isActive }) =>
@@ -210,7 +212,6 @@ const DashboardLayout = () => {
                     >
                       Manage Users
                     </NavLink>
-
                     <NavLink
                       to="/dashboard/manage-tickets"
                       className={({ isActive }) =>
