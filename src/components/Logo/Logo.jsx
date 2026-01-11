@@ -7,7 +7,9 @@ const Logo = () => {
       <Link to="/" className="text-2xl font-bold flex items-center gap-2">
         <BsBusFront />
         {/* <TbTrain className=" -scale-x-100 " /> */}
-        Seat<span className="text-primary">Pao</span>
+        <p>
+          Seat<span className="text-primary">Pao</span>
+        </p>
       </Link>
     </div>
   );

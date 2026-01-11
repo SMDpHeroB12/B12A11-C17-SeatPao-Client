@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
+import SkeletonLoader from "../../../components/SkeletonLoader";
 
 const LatestTicketsSection = () => {
   const [tickets, setTickets] = useState([]);
@@ -21,9 +22,21 @@ const LatestTicketsSection = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-16">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
+      <section className="my-16">
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-3xl font-bold text-center mb-10"
+        >
+          Latest Tickets
+        </motion.h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <SkeletonLoader key={index} />
+          ))}
+        </div>
+      </section>
     );
   }
 

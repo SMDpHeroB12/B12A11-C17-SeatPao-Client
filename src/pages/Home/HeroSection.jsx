@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
-    <div className="hero min-h-[70vh] bg-base-200 dark:bg-base-300 rounded-xl my-5">
+    <div className="hero min-h-[65vh] bg-base-200 dark:bg-base-300 rounded-xl my-5">
       <div className="hero-content flex-col lg:flex-row-reverse gap-10">
         {/* Hero Image */}
         <motion.img

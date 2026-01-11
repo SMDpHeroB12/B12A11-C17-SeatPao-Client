@@ -39,6 +39,9 @@ import MyAddedTickets from "../pages/dashboard/Vendor/MyAddedTickets";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import PublicRoute from "./PublicRoute";
+import About from "../pages/About/About";
+import Contact from "../pages/Contact/Contact";
+import Privacy from "../pages/Privacy/Privacy";
 
 const router = createBrowserRouter([
   // MAIN WEBSITE LAYOUT =====================
@@ -59,6 +62,9 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      { path: "/about", Component: About },
+      { path: "/contact", Component: Contact },
+      { path: "/privacy", Component: Privacy },
     ],
   },
 

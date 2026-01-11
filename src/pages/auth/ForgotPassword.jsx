@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import Swal from "sweetalert2";
+import { motion } from "framer-motion";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -48,44 +49,48 @@ const ForgotPassword = () => {
   return (
     <>
       <Navbar />
+      <motion.div
+        initial={{ opacity: 0, y: 80 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="min-h-screen flex justify-center items-center">
+          <div className="w-full max-w-md bg-base-100 shadow-xl p-8 rounded-xl border border-gray-200">
+            <h2 className="text-2xl font-bold text-center mb-6">
+              Forgot Password
+            </h2>
 
-      <div className="min-h-screen flex justify-center items-center">
-        <div className="w-full max-w-md bg-base-100 shadow-xl p-8 rounded-xl border border-gray-200">
-          <h2 className="text-2xl font-bold text-center mb-6">
-            Forgot Password
-          </h2>
+            <form onSubmit={handleResetPassword} className="space-y-4">
+              <div>
+                <label className="font-medium">Email Address</label>
+                <input
+                  type="email"
+                  className="input input-bordered w-full mt-1"
+                  placeholder="Enter your registered email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
 
-          <form onSubmit={handleResetPassword} className="space-y-4">
-            <div>
-              <label className="font-medium">Email Address</label>
-              <input
-                type="email"
-                className="input input-bordered w-full mt-1"
-                placeholder="Enter your registered email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
+              <button
+                type="submit"
+                className="btn btn-primary w-full"
+                disabled={loading}
+              >
+                {loading ? "Sending..." : "Send Reset Email"}
+              </button>
+            </form>
 
-            <button
-              type="submit"
-              className="btn btn-primary w-full"
-              disabled={loading}
-            >
-              {loading ? "Sending..." : "Send Reset Email"}
-            </button>
-          </form>
-
-          <p className="text-center mt-4">
-            Remember your password?{" "}
-            <Link to="/login" className="text-primary font-medium">
-              Go back to Login
-            </Link>
-          </p>
+            <p className="text-center mt-4">
+              Remember your password?{" "}
+              <Link to="/login" className="text-primary font-medium">
+                Go back to Login
+              </Link>
+            </p>
+          </div>
         </div>
-      </div>
-
+      </motion.div>
       <Footer />
     </>
   );

@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -138,105 +139,113 @@ const Login = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex justify-center items-center">
-        <div className="w-full max-w-md bg-base-100 shadow-xl p-8 rounded-xl border border-gray-200">
-          <h2 className="text-2xl font-bold text-center mb-6">
-            Login to Your Account
-          </h2>
+      <motion.div
+        initial={{ opacity: 0, y: -80 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="min-h-screen flex justify-center items-center">
+          <div className="w-full max-w-md bg-base-100 shadow-xl p-8 rounded-xl border border-gray-200">
+            <h2 className="text-2xl font-bold text-center mb-6">
+              Login to Your Account
+            </h2>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="font-medium">Email</label>
-              <input
-                type="email"
-                name="email"
-                className="input w-full mt-1"
-                placeholder="Enter your email"
-                required
-              />
-            </div>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="font-medium">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  className="input w-full mt-1"
+                  placeholder="Enter your email"
+                  required
+                />
+              </div>
 
-            <div>
-              <label className="font-medium">Password</label>
-              <input
-                type="password"
-                name="password"
-                className="input w-full mt-1"
-                placeholder="Enter password"
-                required
-              />
+              <div>
+                <label className="font-medium">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  className="input w-full mt-1"
+                  placeholder="Enter password"
+                  required
+                />
 
-              {/* <button
+                {/* <button
                 type="button"
                 onClick={handleForgotPassword}
                 className="text-primary text-sm mt-1"
               >
                 Forgot Password?
               </button> */}
-              <Link
-                to="/forgot-password"
-                className="text-primary text-sm mt-3 inline-block"
-              >
-                Forgot Password?
-              </Link>
+                <Link
+                  to="/forgot-password"
+                  className="text-primary text-sm mt-3 inline-block"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
+
+              {error && (
+                <p className="text-red-500 text-center mb-3">{error}</p>
+              )}
+
+              <button type="submit" className="btn btn-primary w-full mt-3">
+                {loading ? "Logging in..." : "Login"}
+              </button>
+            </form>
+
+            <div className="divider">OR</div>
+
+            {/* 🔒 DEMO LOGIN – NO UI CHANGE (Hidden Triggers) */}
+            <div className="w-full my-3 flex-col flex justify-between items-center gap-4 ">
+              <div>
+                <h2>Demo Credentials</h2>
+              </div>
+              <div className="flex gap-4">
+                <button
+                  className="btn hover:bg-purple-400 border border-gray-200"
+                  onClick={() => handleDemoLogin("admin")}
+                  disabled={loading}
+                >
+                  Admin
+                </button>
+                <button
+                  className="btn hover:bg-purple-400 border border-gray-200"
+                  onClick={() => handleDemoLogin("vendor")}
+                  disabled={loading}
+                >
+                  Vendor
+                </button>
+                <button
+                  className="btn hover:bg-purple-400 border border-gray-200"
+                  onClick={() => handleDemoLogin("user")}
+                  disabled={loading}
+                >
+                  User
+                </button>
+              </div>
             </div>
 
-            {error && <p className="text-red-500 text-center mb-3">{error}</p>}
-
-            <button type="submit" className="btn btn-primary w-full mt-3">
-              {loading ? "Logging in..." : "Login"}
+            <button
+              onClick={handleGoogle}
+              disabled={loading}
+              className="btn w-full flex items-center gap-3"
+            >
+              <FcGoogle size={22} />{" "}
+              {loading ? "Logging in..." : "Continue with Google"}
             </button>
-          </form>
 
-          <div className="divider">OR</div>
-
-          {/* 🔒 DEMO LOGIN – NO UI CHANGE (Hidden Triggers) */}
-          <div className="w-full my-3 flex-col flex justify-between items-center gap-4 ">
-            <div>
-              <h2>Demo Credentials</h2>
-            </div>
-            <div className="flex gap-4">
-              <button
-                className="btn hover:bg-purple-400 border border-gray-200"
-                onClick={() => handleDemoLogin("admin")}
-                disabled={loading}
-              >
-                Admin
-              </button>
-              <button
-                className="btn hover:bg-purple-400 border border-gray-200"
-                onClick={() => handleDemoLogin("vendor")}
-                disabled={loading}
-              >
-                Vendor
-              </button>
-              <button
-                className="btn hover:bg-purple-400 border border-gray-200"
-                onClick={() => handleDemoLogin("user")}
-                disabled={loading}
-              >
-                User
-              </button>
-            </div>
+            <p className="text-center mt-4">
+              Don’t have an account?{" "}
+              <Link to="/register" className="text-primary font-medium">
+                Register Now
+              </Link>
+            </p>
           </div>
-
-          <button
-            onClick={handleGoogle}
-            disabled={loading}
-            className="btn w-full flex items-center gap-3"
-          >
-            <FcGoogle size={22} />{" "}
-            {loading ? "Logging in..." : "Continue with Google"}
-          </button>
-
-          <p className="text-center mt-4">
-            Don’t have an account?{" "}
-            <Link to="/register" className="text-primary font-medium">
-              Register Now
-            </Link>
-          </p>
         </div>
-      </div>
+      </motion.div>
       <Footer />
     </>
   );

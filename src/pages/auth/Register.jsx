@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import { motion } from "framer-motion";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
@@ -116,95 +117,103 @@ const Register = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex justify-center items-center">
-        <div className="w-full max-w-md bg-base-100 shadow-xl p-8 rounded-xl border border-gray-200">
-          <h2 className="text-2xl font-bold text-center mb-6">
-            Create an Account
-          </h2>
+      <motion.div
+        initial={{ opacity: 0, y: 80 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="min-h-screen flex justify-center items-center">
+          <div className="w-full max-w-md bg-base-100 shadow-xl p-8 rounded-xl border border-gray-200">
+            <h2 className="text-2xl font-bold text-center mb-6">
+              Create an Account
+            </h2>
 
-          <form onSubmit={handleRegister} className="space-y-4">
-            <div>
-              <label className="font-medium">Full Name</label>
-              <input
-                type="text"
-                name="name"
-                className="input w-full mt-1"
-                placeholder="Enter your name"
-                required
-              />
-            </div>
+            <form onSubmit={handleRegister} className="space-y-4">
+              <div>
+                <label className="font-medium">Full Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  className="input w-full mt-1"
+                  placeholder="Enter your name"
+                  required
+                />
+              </div>
 
-            <div>
-              <label className="font-medium">Photo URL</label>
-              <input
-                type="text"
-                name="photo"
-                className="input w-full mt-1"
-                placeholder="Your photo link"
-              />
-            </div>
+              <div>
+                <label className="font-medium">Photo URL</label>
+                <input
+                  type="text"
+                  name="photo"
+                  className="input w-full mt-1"
+                  placeholder="Your photo link"
+                />
+              </div>
 
-            <div>
-              <label className="font-medium">Email</label>
-              <input
-                type="email"
-                name="email"
-                className="input  w-full mt-1"
-                placeholder="Enter your email"
-                required
-              />
-            </div>
+              <div>
+                <label className="font-medium">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  className="input  w-full mt-1"
+                  placeholder="Enter your email"
+                  required
+                />
+              </div>
 
-            <div>
-              <label className="font-medium">Password</label>
-              <input
-                type="password"
-                name="password"
-                className="input w-full mt-1"
-                placeholder="Enter password"
-                required
-              />
-            </div>
+              <div>
+                <label className="font-medium">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  className="input w-full mt-1"
+                  placeholder="Enter password"
+                  required
+                />
+              </div>
 
-            <div>
-              <label className="font-medium">Confirm Password</label>
-              <input
-                type="password"
-                name="confirm"
-                className="input w-full mt-1"
-                placeholder="Confirm password"
-                required
-              />
-            </div>
-            {error && <p className="text-red-500 text-center mb-3">{error}</p>}
+              <div>
+                <label className="font-medium">Confirm Password</label>
+                <input
+                  type="password"
+                  name="confirm"
+                  className="input w-full mt-1"
+                  placeholder="Confirm password"
+                  required
+                />
+              </div>
+              {error && (
+                <p className="text-red-500 text-center mb-3">{error}</p>
+              )}
+              <button
+                type="submit"
+                className="btn btn-primary w-full mt-3"
+                disabled={loading}
+              >
+                {loading ? "Registering..." : "Create Account"}
+              </button>
+            </form>
+
+            <div className="divider">OR</div>
+
             <button
-              type="submit"
-              className="btn btn-primary w-full mt-3"
+              onClick={handleGoogle}
               disabled={loading}
+              className="btn w-full flex items-center gap-3"
             >
-              {loading ? "Registering..." : "Create Account"}
+              <FcGoogle size={22} />{" "}
+              {loading ? "Registering..." : "Continue with Google"}
             </button>
-          </form>
 
-          <div className="divider">OR</div>
-
-          <button
-            onClick={handleGoogle}
-            disabled={loading}
-            className="btn w-full flex items-center gap-3"
-          >
-            <FcGoogle size={22} />{" "}
-            {loading ? "Registering..." : "Continue with Google"}
-          </button>
-
-          <p className="text-center mt-4">
-            Already have an account?{" "}
-            <Link to="/login" className="text-primary font-medium">
-              Login Now
-            </Link>
-          </p>
+            <p className="text-center mt-4">
+              Already have an account?{" "}
+              <Link to="/login" className="text-primary font-medium">
+                Login Now
+              </Link>
+            </p>
+          </div>
         </div>
-      </div>
+      </motion.div>
       <Footer />
     </>
   );

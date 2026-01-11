@@ -20,20 +20,24 @@ const Footer = () => {
           <h3 className="text-lg font-semibold mb-3">Quick Links</h3>
           <ul className="space-y-2">
             <li>
-              <a className="link link-hover" href="/">
+              <Link className="link link-hover" to="/">
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a className="link link-hover" href="/tickets">
+              <Link className="link link-hover" to="/tickets">
                 All Tickets
-              </a>
+              </Link>
             </li>
             <li>
-              <a className="link link-hover">Contact Us</a>
+              <Link className="link link-hover" to="/contact">
+                Contact Us
+              </Link>
             </li>
             <li>
-              <a className="link link-hover">About</a>
+              <Link className="link link-hover" to="/about">
+                About Us
+              </Link>
             </li>
           </ul>
         </div>
@@ -42,11 +46,11 @@ const Footer = () => {
         <div>
           <h3 className="text-lg font-semibold mb-3">Contact</h3>
           <ul className="space-y-2">
-            <li>Email: support@seatpao.com</li>
+            <li>Email: seatpao@gmail.com</li>
             <li>Phone: +880 1791 717 966</li>
             <li className="flex items-center">
               <Link
-                to="https://www.facebook.com/learnersIT.BD/"
+                to="https://www.facebook.com/shekhmdnayem"
                 target="_blank"
                 className="link link-hover flex items-center gap-2 "
               >

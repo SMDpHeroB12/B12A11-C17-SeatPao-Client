@@ -49,7 +49,44 @@ const Navbar = () => {
           All Tickets
         </NavLink>
       </li>
+      <li>
+        <NavLink
+          to="/about"
+          className={({ isActive }) =>
+            `px-3 py-2 rounded-md hover:bg-base-200 ${
+              isActive ? "bg-base-300 font-medium" : ""
+            }`
+          }
+        >
+          About
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/contact"
+          className={({ isActive }) =>
+            `px-3 py-2 rounded-md hover:bg-base-200 ${
+              isActive ? "bg-base-300 font-medium" : ""
+            }`
+          }
+        >
+          Contact
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/privacy"
+          className={({ isActive }) =>
+            `px-3 py-2 rounded-md hover:bg-base-200 ${
+              isActive ? "bg-base-300 font-medium" : ""
+            }`
+          }
+        >
+          Privacy
+        </NavLink>
+      </li>
 
+      {/* Show Dashboard link only if user is logged in */}
       {user && (
         <li>
           <NavLink
