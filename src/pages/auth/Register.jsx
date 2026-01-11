@@ -7,6 +7,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
 const Register = () => {
+  const [loading, setLoading] = useState(false);
   const { registerUser, googleLogin } = useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading;
 
     const form = e.target;
     const name = form.name.value;
@@ -29,24 +31,28 @@ const Register = () => {
     // Length check
     if (password.length < 6) {
       setError("Password must be at least 6 characters long.");
+      setLoading(false);
       return;
     }
 
     // Uppercase check
     if (!/[A-Z]/.test(password)) {
       setError("Password must contain at least one uppercase letter.");
+      setLoading(false);
       return;
     }
 
     // Lowercase check
     if (!/[a-z]/.test(password)) {
       setError("Password must contain at least one lowercase letter.");
+      setLoading(false);
       return;
     }
 
     // Confirm password match
     if (password !== confirm) {
       setError("Passwords do not match.");
+      setLoading(false);
       return;
     }
 
@@ -73,6 +79,8 @@ const Register = () => {
     } catch (err) {
       console.log(err);
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -169,8 +177,12 @@ const Register = () => {
               />
             </div>
             {error && <p className="text-red-500 text-center mb-3">{error}</p>}
-            <button type="submit" className="btn btn-primary w-full mt-3">
-              Create Account
+            <button
+              type="submit"
+              className="btn btn-primary w-full mt-3"
+              disabled={loading}
+            >
+              {loading ? "Registering..." : "Create Account"}
             </button>
           </form>
 
@@ -178,9 +190,11 @@ const Register = () => {
 
           <button
             onClick={handleGoogle}
+            disabled={loading}
             className="btn w-full flex items-center gap-3"
           >
-            <FcGoogle size={22} /> Continue with Google
+            <FcGoogle size={22} />{" "}
+            {loading ? "Registering..." : "Continue with Google"}
           </button>
 
           <p className="text-center mt-4">

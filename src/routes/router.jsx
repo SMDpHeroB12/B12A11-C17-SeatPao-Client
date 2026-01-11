@@ -37,6 +37,8 @@ import PaymentSuccess from "../pages/Payment/PaymentSuccess";
 import PaymentCancel from "../pages/Payment/PaymentCancel";
 import MyAddedTickets from "../pages/dashboard/Vendor/MyAddedTickets";
 import LoadingSpinner from "../components/LoadingSpinner";
+import ForgotPassword from "../pages/auth/ForgotPassword";
+import PublicRoute from "./PublicRoute";
 
 const router = createBrowserRouter([
   // MAIN WEBSITE LAYOUT =====================
@@ -61,8 +63,31 @@ const router = createBrowserRouter([
   },
 
   // AUTH ROUTES =============================
-  { path: "/login", Component: Login },
-  { path: "/register", Component: Register },
+  {
+    path: "/login",
+    element: (
+      <PublicRoute>
+        <Login />
+      </PublicRoute>
+    ),
+  },
+
+  {
+    path: "/register",
+    element: (
+      <PublicRoute>
+        <Register />
+      </PublicRoute>
+    ),
+  },
+  {
+    path: "/forgot-password",
+    element: (
+      <PublicRoute>
+        <ForgotPassword />
+      </PublicRoute>
+    ),
+  },
 
   // DASHBOARD ROUTES (Protected) ===========
   {
