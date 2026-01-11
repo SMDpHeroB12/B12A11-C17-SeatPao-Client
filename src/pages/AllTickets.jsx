@@ -95,7 +95,7 @@ const AllTickets = () => {
         <input
           type="text"
           placeholder="From location"
-          className="input "
+          className="input w-full "
           value={from}
           onChange={(e) => setFrom(e.target.value)}
         />
@@ -103,13 +103,13 @@ const AllTickets = () => {
         <input
           type="text"
           placeholder="To location"
-          className="input "
+          className="input w-full "
           value={to}
           onChange={(e) => setTo(e.target.value)}
         />
 
         <select
-          className="select"
+          className="select w-full "
           value={type}
           onChange={(e) => setType(e.target.value)}
         >
@@ -121,7 +121,7 @@ const AllTickets = () => {
         </select>
 
         <select
-          className="select "
+          className="select w-full "
           value={sort}
           onChange={(e) => setSort(e.target.value)}
         >
