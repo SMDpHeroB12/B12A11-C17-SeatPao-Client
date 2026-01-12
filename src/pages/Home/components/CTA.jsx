@@ -10,7 +10,7 @@ const CTA = () => {
       className="py-16 bg-primary text-white rounded-xl text-center my-16"
     >
       <h2 className="text-3xl font-bold mb-4">Ready to Book Your Next Trip?</h2>
-      <p className="mb-6 opacity-90">
+      <p className="mb-6 opacity-90 w-80 mx-auto">
         Get the best deals on tickets with SeatPao today.
       </p>
       <Link to="/tickets">

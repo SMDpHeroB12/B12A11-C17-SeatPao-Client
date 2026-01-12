@@ -24,13 +24,17 @@ const Newsletter = () => {
         onSubmit={handleSubmit}
         className="flex flex-col sm:flex-row gap-3 justify-center"
       >
-        <input
-          type="email"
-          required
-          placeholder="Enter your email"
-          className="input input-bordered w-full sm:w-80"
-        />
-        <button className="btn btn-primary">Subscribe</button>
+        <div className="px-5 sm:px-0">
+          <input
+            type="email"
+            required
+            placeholder="Enter your email"
+            className="input w-full sm:w-80"
+          />
+        </div>
+        <div className="px-5 sm:px-0">
+          <button className="btn w-full btn-primary">Subscribe</button>
+        </div>
       </form>
     </motion.section>
   );
